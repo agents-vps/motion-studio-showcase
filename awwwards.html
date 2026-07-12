@@ -62,9 +62,14 @@
             border: 1px solid rgb(from oklch(65% 0.32 35) r g b / 0.45);
             border-radius: 50%;
             position: fixed;
-            transform: translate(-50%, -50%);
+            
             pointer-events: none;
             z-index: 9998;
+        
+            top: 0;
+            left: 0;
+            margin-top: -22px;
+            margin-left: -22px;
         }
         .cursor-dot {
             width: 8px;
@@ -72,10 +77,15 @@
             background-color: oklch(65% 0.32 35);
             border-radius: 50%;
             position: fixed;
-            transform: translate(-50%, -50%);
+            
             pointer-events: none;
             z-index: 9999;
             transition: width 0.2s, height 0.2s, background-color 0.2s;
+        
+            top: 0;
+            left: 0;
+            margin-top: -4px;
+            margin-left: -4px;
         }
 
         /* Continuous Gravity Starfield Canvas */

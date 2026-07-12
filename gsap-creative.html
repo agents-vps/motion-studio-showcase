@@ -35,10 +35,15 @@
             background-color: var(--brand-neon);
             border-radius: 50%;
             position: fixed;
-            transform: translate(-50%, -50%);
+            
             pointer-events: none;
             z-index: 9999;
             transition: width 0.2s, height 0.2s, background-color 0.2s;
+        
+            top: 0;
+            left: 0;
+            margin-top: -4px;
+            margin-left: -4px;
         }
 
         .custom-cursor-ring {
@@ -47,9 +52,14 @@
             border: 1px solid rgb(from var(--brand-neon) r g b / 0.4); /* Relative color syntax */
             border-radius: 50%;
             position: fixed;
-            transform: translate(-50%, -50%);
+            
             pointer-events: none;
             z-index: 9998;
+        
+            top: 0;
+            left: 0;
+            margin-top: -20px;
+            margin-left: -20px;
         }
 
         /* Custom Scrollbar design utilizing modern CSS standard scrollbar variables */
