@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MADINA.KINETICS | Design Organique & Automations — Martinique</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sand: '#F4F0EB', // Warm Organic Sand
+                        clay: '#9F4D32', // Terracotta Volcanic Clay
+                        obsidian: '#1C1C1E', // Luxury Deep Charcoal
+                        goldAccent: 'oklch(78% 0.15 85)', // Sun-gilded warm gold
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+        :root {
+            --color-sand: #F4F0EB;
+            --color-clay: #9F4D32;
+            --color-obsidian: #1C1C1E;
+            --color-gold: oklch(78% 0.15 85);
+        }
+
+        @view-transition {
+            navigation: auto;
+        }
+
+        body {
+            background-color: var(--color-sand);
+            color: var(--color-obsidian);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* Animated Scroll Progress Tracker */
+        @keyframes grow-scroll {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+        .scroll-tracker-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-clay) 0%, var(--color-gold) 100%);
+            transform-origin: 0% 50%;
+            z-index: 100;
+            animation: grow-scroll auto linear;
+            animation-timeline: scroll(root);
+        }
+
+        /* Custom Inertial Mouse Pointer */
+        .custom-ring {
+            width: 44px;
+            height: 44px;
+            border: 1px solid var(--color-clay);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+        /* Editorial card transitions with organic shadows */
+        .organic-card {
+            border: 1px solid rgba(159, 77, 50, 0.15);
+            background-color: rgba(255, 255, 255, 0.4);
+            transition: border-color 0.4s, background-color 0.4s, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
+            
+            &:hover {
+                border-color: var(--color-clay);
+                background-color: #ffffff;
+                transform: translateY(-6px);
+                box-shadow: 0 20px 40px -20px rgba(159, 77, 50, 0.15);
+            }
+        }
+
+        /* Animated SVG Lines for the Automation flow chart */
+        .animated-svg-path {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            transition: stroke-dashoffset 1.5s ease-in-out;
+            
+            &.active {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        /* Elegant Cream Chat Widget (Bottom-Right) */
+        #chat-widget {
+            border: 1px solid rgba(159, 77, 50, 0.2);
+            background-color: #FAF8F5;
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), display 0.35s cubic-bezier(0.16, 1, 0.3, 1) allow-discrete;
+            box-shadow: 0 30px 60px -15px rgba(159, 77, 50, 0.12);
+            
+            &:popover-open {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                
+                @starting-style {
+                    opacity: 0;
+                    transform: translateY(20px) scale(0.95);
+                }
+            }
+        }
+    </style>
+    <!-- Shared haptics/audio module -->
+    <script src="tactile-feedback.js" defer></script>
+</head>
+<body class="min-h-screen relative overflow-x-hidden selection:bg-clay selection:text-sand">
+
+    <!-- Pointer Ring -->
+    <div class="custom-ring hidden md:block" id="custom-ring"></div>
+
+    <!-- Scroll Line -->
+    <div class="scroll-tracker-line"></div>
+
+    <!-- Navigation Header -->
+    <header class="fixed top-0 left-0 w-full z-40 bg-sand/90 backdrop-blur-md border-b border-clay/10 px-6 lg:px-12 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="madina_v2.html" class="text-xl font-bold tracking-tight text-obsidian flex items-center gap-2 group font-serif">
+                <span class="w-2.5 h-2.5 bg-clay rounded-full group-hover:scale-150 transition-transform"></span>
+                madina<span class="font-sans text-xs tracking-widest text-clay font-bold block uppercase ml-1">.kinetics</span>
+            </a>
+            
+            <nav class="hidden md:flex items-center space-x-10 text-[10px] tracking-widest uppercase font-semibold text-obsidian/70">
+                <a href="#solutions" class="hover:text-clay transition-colors">01. Solutions</a>
+                <a href="#designer-pipeline" class="hover:text-clay transition-colors">02. Flux Visuel</a>
+                <a href="#exhibition" class="hover:text-clay transition-colors">03. Réalisations</a>
+                <a href="#briefing" class="hover:text-clay transition-colors">04. Briefing</a>
+            </nav>
+
+            <button popovertarget="chat-widget" class="px-5 py-2 border border-clay/30 rounded-full hover:border-clay hover:bg-clay hover:text-sand text-xs font-semibold uppercase tracking-wider transition-all">
+                Madina Bot &raquo;
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Hero -->
+    <main class="pt-40 max-w-7xl mx-auto px-6 lg:px-12">
+        
+        <!-- Luxury Hero Block -->
+        <section class="mb-32 relative grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div class="lg:col-span-7 z-10 text-left">
+                <span class="text-xs font-bold tracking-widest uppercase text-clay mb-3 block">// WARM CARIBBEAN KINETICS</span>
+                <h1 class="text-4xl lg:text-7xl font-bold font-serif tracking-tight text-obsidian leading-none mb-8">
+                    L'Art de <span class="italic text-clay">l'Automation</span> fusionné au design organique.
+                </h1>
+                <p class="text-base lg:text-lg text-obsidian/80 max-w-xl leading-relaxed mb-8">
+                    Basée en Martinique, notre agence conçoit des sites internet d'exception, des bots d'IA conversationnels et des systèmes autonomes pensés pour libérer l'humain et sublimer votre marque.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <button popovertarget="chat-widget" class="px-6 py-3.5 bg-clay hover:bg-clay/90 text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-clay/20">
+                        Discuter avec l'IA
+                    </button>
+                    <a href="#designer-pipeline" class="px-6 py-3.5 border border-clay text-clay font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-clay/5 transition-colors">
+                        Voir la démo de flux &rarr;
+                    </a>
+                </div>
+            </div>
+
+            <!-- Warm Tropical Architectural Image Frame -->
+            <div class="lg:col-span-5 relative">
+                <div class="w-full aspect-[4/5] rounded-3xl overflow-hidden border border-clay/10 relative shadow-2xl group">
+                    <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80" 
+                         alt="Tropical Premium Architecture" 
+                         class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-clay/35 via-transparent to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 text-left text-white">
+                        <span class="text-[9px] uppercase font-bold tracking-widest block opacity-75">NEXUS HABITATION</span>
+                        <span class="text-lg font-serif">Fort-de-France, Martinique</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Solutions Section -->
+        <section id="solutions" class="mb-32 border-t border-clay/15 pt-16">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <div class="lg:col-span-4">
+                    <span class="text-xs font-bold tracking-widest text-clay uppercase mb-2 block">// NOS EXPERTISES</span>
+                    <h2 class="text-3xl lg:text-5xl font-bold font-serif text-obsidian">Solutions de Prestige</h2>
+                    <p class="text-sm text-obsidian/70 leading-relaxed mt-4">
+                        Nous refusons les solutions génériques. Chaque automation et interface est sur-mesure, mariant l'efficacité technique à l'élégance éditoriale.
+                    </p>
+                </div>
+                
+                <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Solution A -->
+                    <div class="organic-card p-8 rounded-3xl flex flex-col justify-between h-[260px]">
+                        <span class="text-[10px] font-bold text-clay uppercase tracking-widest">01 &bull; WEB DESIGN</span>
+                        <div>
+                            <h3 class="text-xl font-bold font-serif text-obsidian mb-2">Interfaces d'Exception</h3>
+                            <p class="text-xs text-obsidian/80 leading-relaxed">
+                                Conception de vitrines interactives au style minimaliste, inspirées des standards de mode et d'architecture haut de gamme.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Solution B -->
+                    <div class="organic-card p-8 rounded-3xl flex flex-col justify-between h-[260px]">
+                        <span class="text-[10px] font-bold text-clay uppercase tracking-widest">02 &bull; BOT CREATION</span>
+                        <div>
+                            <h3 class="text-xl font-bold font-serif text-obsidian mb-2">Agents Conversationnels</h3>
+                            <p class="text-xs text-obsidian/80 leading-relaxed">
+                                Intégration de bots d'IA sur WhatsApp ou Messenger capables de répondre instantanément en français et créole antillais pour qualifier vos prospects.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Solution C -->
+                    <div class="organic-card p-8 rounded-3xl flex flex-col justify-between h-[260px]">
+                        <span class="text-[10px] font-bold text-clay uppercase tracking-widest">03 &bull; WORKFLOW AUTOMATIONS</span>
+                        <div>
+                            <h3 class="text-xl font-bold font-serif text-obsidian mb-2">Automations de Workflows</h3>
+                            <p class="text-xs text-obsidian/80 leading-relaxed">
+                                Interconnexion de vos applications (Make, Zapier, CRM) pour automatiser la facturation, l'onboarding et l'alerte commerciale.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Solution D -->
+                    <div class="organic-card p-8 rounded-3xl flex flex-col justify-between h-[260px]">
+                        <span class="text-[10px] font-bold text-clay uppercase tracking-widest">04 &bull; IA DATA INTEGRATION</span>
+                        <div>
+                            <h3 class="text-xl font-bold font-serif text-obsidian mb-2">Analyse & Pipelines IA</h3>
+                            <p class="text-xs text-obsidian/80 leading-relaxed">
+                                Extraction intelligente de données web et traitement sémantique automatique par IA pour alimenter vos systèmes décisionnels.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Designer Interactive Pipeline (SVG Morph-lines) -->
+        <section id="designer-pipeline" class="mb-32 border-t border-clay/15 pt-16">
+            <span class="text-xs font-bold tracking-widest text-clay uppercase mb-2 block">// 02 &bull; LA CLINIQUE DU FLUX</span>
+            <h2 class="text-3xl lg:text-5xl font-bold font-serif text-obsidian mb-8">Cartographie d'un Écosystème Connecté</h2>
+            
+            <div class="p-8 border border-clay/20 bg-white/30 rounded-3xl relative overflow-hidden min-h-[400px] flex flex-col justify-between shadow-sm">
+                <div class="absolute inset-0 bg-[radial-gradient(rgba(159,77,50,0.03)_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                
+                <div class="z-10 flex justify-between items-center text-xs text-clay/70 font-semibold">
+                    <span>INTERFACE DE VISUALISATION D'AUTOMATION</span>
+                    <span id="pipeline-status">En attente de couplage...</span>
+                </div>
+
+                <!-- Abstract Interactive SVG Graph mapping -->
+                <div class="z-10 grid grid-cols-1 md:grid-cols-4 gap-8 relative items-center my-8">
+                    <!-- SVG lines representing connectors -->
+                    <svg class="absolute inset-0 w-full h-full hidden md:block z-0 overflow-visible pointer-events-none">
+                        <line x1="12%" y1="50%" x2="38%" y2="50%" stroke="rgba(159, 77, 50, 0.15)" stroke-width="2" />
+                        <line x1="38%" y1="50%" x2="62%" y2="50%" stroke="rgba(159, 77, 50, 0.15)" stroke-width="2" />
+                        <line x1="62%" y1="50%" x2="88%" y2="50%" stroke="rgba(159, 77, 50, 0.15)" stroke-width="2" />
+                        
+                        <!-- Glowing animated stroke paths on active -->
+                        <path id="svg-p1" class="animated-svg-path" d="M 120,50 L 320,50" stroke="#9F4D32" stroke-width="2.5" fill="none" />
+                        <path id="svg-p2" class="animated-svg-path" d="M 320,50 L 520,50" stroke="#9F4D32" stroke-width="2.5" fill="none" />
+                        <path id="svg-p3" class="animated-svg-path" d="M 520,50 L 720,50" stroke="#9F4D32" stroke-width="2.5" fill="none" />
+                    </svg>
+
+                    <!-- Node 1 -->
+                    <div class="node-item p-6 rounded-2xl border border-clay/10 bg-white/80 text-center shadow-sm relative z-10 transition-all duration-300" id="nd-1">
+                        <span class="text-[9px] text-clay/80 font-bold block uppercase tracking-wider">01 / TRIGGER</span>
+                        <h4 class="text-sm font-bold text-obsidian mt-1">Saisie Formulaire</h4>
+                    </div>
+
+                    <!-- Node 2 -->
+                    <div class="node-item p-6 rounded-2xl border border-clay/10 bg-white/30 text-center opacity-40 shadow-sm relative z-10 transition-all duration-300" id="nd-2">
+                        <span class="text-[9px] text-clay/80 font-bold block uppercase tracking-wider">02 / AI CLASSIFIER</span>
+                        <h4 class="text-sm font-bold text-obsidian mt-1">Analyse Madina Bot</h4>
+                    </div>
+
+                    <!-- Node 3 -->
+                    <div class="node-item p-6 rounded-2xl border border-clay/10 bg-white/30 text-center opacity-40 shadow-sm relative z-10 transition-all duration-300" id="nd-3">
+                        <span class="text-[9px] text-clay/80 font-bold block uppercase tracking-wider">03 / CRM SYNC</span>
+                        <h4 class="text-sm font-bold text-obsidian mt-1">Mise à jour Fiche</h4>
+                    </div>
+
+                    <!-- Node 4 -->
+                    <div class="node-item p-6 rounded-2xl border border-clay/10 bg-white/30 text-center opacity-40 shadow-sm relative z-10 transition-all duration-300" id="nd-4">
+                        <span class="text-[9px] text-clay/80 font-bold block uppercase tracking-wider">04 / REACTION</span>
+                        <h4 class="text-sm font-bold text-obsidian mt-1">Alerte SMS & Email</h4>
+                    </div>
+                </div>
+
+                <div class="z-10 flex justify-between items-center">
+                    <button onclick="triggerFlow()" class="px-6 py-3 bg-clay hover:bg-clay/90 text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all shadow-md">
+                        Lancer le Flux Tactile &raquo;
+                    </button>
+                    <span class="text-[9px] uppercase tracking-wider text-clay font-bold">SYSTÈME ORGANIQUE CLAY & SAND</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Case Exhibition (Réalisations) -->
+        <section id="exhibition" class="mb-32 border-t border-clay/15 pt-16">
+            <span class="text-xs font-bold text-clay uppercase tracking-widest block mb-2">// 03 &bull; NOS RÉALISATIONS</span>
+            <h2 class="text-3xl lg:text-5xl font-bold font-serif text-obsidian mb-12">Le Labo des Antilles</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="group flex flex-col gap-4 cursor-pointer">
+                    <div class="w-full aspect-[4/3] rounded-3xl overflow-hidden border border-clay/10 relative shadow-md">
+                        <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80" 
+                             alt="Luxury Resort" 
+                             class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700">
+                    </div>
+                    <div class="flex justify-between items-start mt-2">
+                        <div>
+                            <span class="text-xs text-clay font-bold uppercase">HABITATION DE PRESTIGE</span>
+                            <h3 class="text-2xl font-bold font-serif text-obsidian mt-1">Habitation Karacoli</h3>
+                        </div>
+                        <span class="text-xs text-obsidian/50 font-semibold tracking-widest uppercase">WEB & BOT &middot; 2026</span>
+                    </div>
+                </div>
+
+                <div class="group flex flex-col gap-4 cursor-pointer">
+                    <div class="w-full aspect-[4/3] rounded-3xl overflow-hidden border border-clay/10 relative shadow-md">
+                        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80" 
+                             alt="Brutalist Interior" 
+                             class="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700">
+                    </div>
+                    <div class="flex justify-between items-start mt-2">
+                        <div>
+                            <span class="text-xs text-clay font-bold uppercase">LOGISTIQUE ANTILLES</span>
+                            <h3 class="text-2xl font-bold font-serif text-obsidian mt-1">Trans-Sainte-Anne</h3>
+                        </div>
+                        <span class="text-xs text-obsidian/50 font-semibold tracking-widest uppercase">WORKFLOW AUTO &middot; 2026</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Briefing Form -->
+        <section id="briefing" class="mb-32 border-t border-clay/15 pt-16">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <div class="lg:col-span-4">
+                    <span class="text-xs font-bold tracking-widest text-clay uppercase mb-2 block">// 04 &bull; COUPLAGE TECHNIQUE</span>
+                    <h2 class="text-3xl font-bold font-serif text-obsidian mb-6">Prêt à Collaborer ?</h2>
+                    <p class="text-xs text-obsidian/70 leading-relaxed">
+                        Soumettez vos besoins en automatisation. Nos ingénieurs basés en Martinique étudient votre workflow pour concevoir votre solution sur-mesure.
+                    </p>
+                </div>
+                
+                <div class="lg:col-span-8">
+                    <form action="#" class="border border-clay/20 p-8 rounded-3xl bg-white/30 flex flex-col gap-6 shadow-sm" id="brief-form">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="text-[10px] text-clay/80 uppercase tracking-wider block mb-2 font-bold">Votre Prénom</label>
+                                <input type="text" placeholder="Alexandre" required class="w-full bg-transparent border-b border-clay/30 focus:border-clay py-2 text-sm focus:outline-none transition-colors">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-clay/80 uppercase tracking-wider block mb-2 font-bold">Adresse Mail</label>
+                                <input type="email" placeholder="alex@domaine.com" required class="w-full bg-transparent border-b border-clay/30 focus:border-clay py-2 text-sm focus:outline-none transition-colors">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-[10px] text-clay/80 uppercase tracking-wider block mb-2 font-bold">Votre Projet Principal</label>
+                            <select class="w-full bg-transparent border-b border-clay/30 focus:border-clay py-2 text-sm focus:outline-none transition-colors text-clay font-bold">
+                                <option value="automation">Automatisation & Intégration CRM (Make/Zapier)</option>
+                                <option value="bot">Création de Bot conversationnel IA & WhatsApp</option>
+                                <option value="design">Conception Web Design d'Exception</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="text-[10px] text-clay/80 uppercase tracking-wider block mb-2 font-bold">Description de l'architecture souhaitée</label>
+                            <textarea rows="4" placeholder="Ex: Envoyer des notifications automatiques de commande à Airtable puis alerter les clients par SMS..." required class="w-full bg-transparent border border-clay/20 rounded-2xl p-4 text-sm focus:outline-none focus:border-clay transition-colors bg-sand/20"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 bg-clay hover:bg-clay/90 text-white font-bold text-xs uppercase tracking-widest rounded-2xl transition-all shadow-md">
+                            Initier le Briefing Organique
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FLOATING CHATBOT WIDGET (Bottom Right) -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <!-- Floating circular trigger button -->
+        <button popovertarget="chat-widget" class="w-14 h-14 rounded-full bg-clay text-white flex items-center justify-center shadow-2xl focus:outline-none select-none hover:scale-105 transition-transform active:scale-95">
+            <svg class="h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+        </button>
+
+        <!-- Popover chat window -->
+        <div id="chat-widget" popover class="fixed bottom-24 right-6 h-[480px] w-[340px] md:w-[380px] rounded-3xl p-6 flex flex-col justify-between shadow-2xl select-none">
+            <div class="flex justify-between items-center border-b border-clay/10 pb-3">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 bg-clay rounded-full animate-ping"></span>
+                    <div class="text-left">
+                        <span class="text-xs font-bold text-obsidian block leading-none font-serif">Madina Bot 🤖</span>
+                        <span class="text-[9px] opacity-60">Creole Assistant Suite &middot; Online</span>
+                    </div>
+                </div>
+                <button popovertarget="chat-widget" popovertargetaction="hide" class="text-[10px] opacity-60 hover:opacity-100">[ Fermer ]</button>
+            </div>
+
+            <!-- Chat bubbles -->
+            <div class="flex-1 my-4 overflow-y-auto space-y-3 text-xs pr-1 scrollbar-none" id="chat-history">
+                <div class="text-left bg-clay/5 p-3 rounded-2xl rounded-tl-none border border-clay/10 leading-relaxed max-w-[85%]">
+                    Sa ka fèt ! 👋 Bienvenue chez <strong>MADINA.KINETICS</strong>. 
+                    Je suis votre assistant d'automatisation. Comment puis-je propulser votre entreprise ?
+                </div>
+            </div>
+
+            <!-- Pre-configured quick-reply chips -->
+            <div class="flex flex-wrap gap-2 mb-3" id="quick-replies">
+                <button onclick="sendReply('Créer un Bot')" class="px-3 py-1 border border-clay/20 bg-clay/5 hover:bg-clay/10 rounded-full text-[9px] uppercase tracking-wider text-clay transition-colors">Créer un Bot IA</button>
+                <button onclick="sendReply('Intégrer mon CRM')" class="px-3 py-1 border border-clay/20 bg-clay/5 hover:bg-clay/10 rounded-full text-[9px] uppercase tracking-wider text-clay transition-colors">Automatiser mon CRM</button>
+                <button onclick="sendReply('Devis site web')" class="px-3 py-1 border border-clay/20 bg-clay/5 hover:bg-clay/10 rounded-full text-[9px] uppercase tracking-wider text-clay transition-colors">Tarif Projet</button>
+            </div>
+
+            <!-- Chat input form -->
+            <form action="#" class="flex gap-2" id="chat-form">
+                <input type="text" id="chat-input" placeholder="Écrivez votre message..." class="flex-1 bg-transparent border border-clay/20 focus:border-clay text-xs rounded-xl px-4 py-2.5 focus:outline-none transition-colors text-obsidian">
+                <button type="submit" class="px-4 bg-clay text-white font-bold text-xs uppercase rounded-xl tracking-wider hover:bg-clay/90 transition-all">Go</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-clay/10 py-12 bg-sand">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-obsidian/60">
+            <div>
+                &copy; 2026 MADINA.KINETICS. Fort-de-France, Martinique &middot; Tous droits réservés.
+            </div>
+            <div class="flex gap-6 font-bold">
+                <a href="index.html" class="text-clay hover:underline">&larr; Retour au hub</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- GSAP for smooth pointer effect -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script>
+        // 1. Cursor movement ring
+        const ring = document.getElementById('custom-ring');
+        let mouse = { x: -100, y: -100 };
+        let ringPos = { x: -100, y: -100 };
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        gsap.ticker.add(() => {
+            ringPos.x += (mouse.x - ringPos.x) * 0.15;
+            ringPos.y += (mouse.y - ringPos.y) * 0.15;
+            gsap.set(ring, { x: ringPos.x, y: ringPos.y });
+        });
+
+        // Pointer expand
+        document.querySelectorAll('button, a, summary, select').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                gsap.to(ring, { width: 56, height: 56, duration: 0.3, ease: 'power2.out', borderColor: '#1C1C1E' });
+            });
+            el.addEventListener('mouseleave', () => {
+                gsap.to(ring, { width: 44, height: 44, duration: 0.3, ease: 'power2.out', borderColor: '#9F4D32' });
+            });
+        });
+
+        // 2. SVG Flow Chart Animation Trigger
+        function triggerFlow() {
+            const status = document.getElementById('pipeline-status');
+            
+            const n1 = document.getElementById('nd-1');
+            const n2 = document.getElementById('nd-2');
+            const n3 = document.getElementById('nd-3');
+            const n4 = document.getElementById('nd-4');
+
+            const p1 = document.getElementById('svg-p1');
+            const p2 = document.getElementById('svg-p2');
+            const p3 = document.getElementById('svg-p3');
+
+            status.innerText = "Traitement en cours...";
+            status.classList.add('text-clay');
+
+            // Draw line 1 & activate node 1
+            setTimeout(() => {
+                n1.classList.add('bg-clay', 'text-white');
+                n1.querySelector('h4').style.color = '#ffffff';
+                p1.classList.add('active');
+                status.innerText = "Nœud 1 validé. Tracé de l'IA...";
+            }, 0);
+
+            // Draw line 2 & activate node 2
+            setTimeout(() => {
+                n2.classList.remove('opacity-40');
+                n2.classList.add('bg-clay', 'text-white');
+                n2.querySelector('h4').style.color = '#ffffff';
+                p2.classList.add('active');
+                status.innerText = "Classification sémantique complétée...";
+            }, 1000);
+
+            // Draw line 3 & activate node 3
+            setTimeout(() => {
+                n3.classList.remove('opacity-40');
+                n3.classList.add('bg-clay', 'text-white');
+                n3.querySelector('h4').style.color = '#ffffff';
+                p3.classList.add('active');
+                status.innerText = "Données synchronisées dans le CRM...";
+            }, 2000);
+
+            // Activate node 4
+            setTimeout(() => {
+                n4.classList.remove('opacity-40');
+                n4.classList.add('bg-clay', 'text-white');
+                n4.querySelector('h4').style.color = '#ffffff';
+                status.innerText = "Flux complété : Notifications transmises ! ✓";
+            }, 3000);
+
+            // Reset back
+            setTimeout(() => {
+                [n1, n2, n3, n4].forEach(n => {
+                    n.classList.remove('bg-clay', 'text-white');
+                    n.querySelector('h4').style.color = '#1C1C1E';
+                });
+                [n2, n3, n4].forEach(n => {
+                    n.classList.add('opacity-40');
+                });
+                [p1, p2, p3].forEach(p => {
+                    p.classList.remove('active');
+                });
+                status.innerText = "Écosystème au repos.";
+                status.classList.remove('text-clay');
+            }, 6000);
+        }
+
+        // 3. Dynamic Chatbot Logic
+        const chatHistory = document.getElementById('chat-history');
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+
+        const replies = {
+            "bot": "Nos bots d'IA s'intègrent sur vos canaux (WhatsApp, Web, Instagram) pour répondre, qualifier et prendre des rendez-vous automatiquement 24h/7j, en français ou en créole martiniquais.",
+            "crm": "Nous automatisons vos CRM (Hubspot, Salesforce, Airtable, Notion) via Make et Zapier pour supprimer les doubles saisies et accélérer vos processus métiers.",
+            "devis": "Intéressant ! Pour obtenir un devis personnalisé, veuillez détailler votre projet dans le formulaire de briefing situé sur votre gauche, ou laissez votre e-mail ici. Nous reprenons contact sous 12h.",
+            "default": "Parfait ! Notre agence Antilles Web & Automations conçoit des solutions d'ingénierie web sur-mesure. Pouvez-vous spécifier les outils que vous utilisez actuellement ?"
+        };
+
+        function addMsg(text, isUser = false) {
+            const bubble = document.createElement('div');
+            bubble.className = isUser 
+                ? "text-right bg-clay text-white p-3 rounded-2xl rounded-tr-none ml-auto max-w-[85%] font-bold leading-relaxed"
+                : "text-left bg-clay/5 p-3 rounded-2xl rounded-tl-none border border-clay/10 leading-relaxed max-w-[85%] text-obsidian";
+            bubble.innerHTML = text;
+            chatHistory.appendChild(bubble);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        function handleBot(userText) {
+            const query = userText.toLowerCase();
+            let reply = replies.default;
+
+            if (query.includes('bot') || query.includes('ia') || query.includes('agent')) {
+                reply = replies.bot;
+            } else if (query.includes('crm') || query.includes('autom') || query.includes('make') || query.includes('notion')) {
+                reply = replies.crm;
+            } else if (query.includes('devis') || query.includes('tarif') || query.includes('prix') || query.includes('site')) {
+                reply = replies.devis;
+            }
+
+            setTimeout(() => {
+                addMsg(reply, false);
+            }, 600);
+        }
+
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            addMsg(text, true);
+            chatInput.value = "";
+            handleBot(text);
+        });
+
+        function sendReply(text) {
+            addMsg(text, true);
+            handleBot(text);
+        }
+
+        // Form feedback
+        const form = document.getElementById('brief-form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert("Votre briefing organique a été transmis à l'équipe technique de MADINA.KINETICS. Un ingénieur martiniquais vous contactera sous 12 heures !");
+            form.reset();
+        });
+    </script>
+</body>
+</html>
