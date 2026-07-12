@@ -13,16 +13,22 @@
                     colors: {
                         dark: '#0B0B0C',
                         titanium: '#E2E2E5',
-                        accent: '#4F46E5', // Deep Indigo
-                        accentLight: '#818CF8',
-                        neon: '#FF5A1F', // Kinetics Orange
+                        accent: 'oklch(60% 0.25 260)', // OKLCH Perceptual Indigo
+                        neon: 'oklch(65% 0.3 35)', // High-chroma OKLCH Orange
                     }
                 }
             }
         }
     </script>
     <style>
-        /* CSS-Only Scroll Progress Bar */
+        /* CSS Nesting native syntax */
+        :root {
+            color-scheme: light dark;
+            --brand-neon: oklch(65% 0.3 35);
+            --brand-accent: oklch(60% 0.25 260);
+        }
+
+        /* Pure CSS Scroll Progress Bar using scroll-driven timelines */
         @keyframes grow-progress {
             from { transform: scaleX(0); }
             to { transform: scaleX(1); }
@@ -33,24 +39,58 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #4F46E5 0%, #FF5A1F 100%);
+            background: linear-gradient(90deg, var(--brand-accent) 0%, var(--brand-neon) 100%);
             transform-origin: 0% 50%;
             z-index: 100;
             animation: grow-progress auto linear;
             animation-timeline: scroll(root);
         }
 
-        /* 3D Glassmorphism Card Hover */
-        .card-perspective {
-            perspective: 1000px;
+        /* Native `@starting-style` + Popover top-layer entry transition */
+        [popover] {
+            opacity: 0;
+            transform: scale(0.95) translateY(-10px);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out, display 0.3s ease-out allow-discrete;
+            
+            &:popover-open {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                
+                @starting-style {
+                    opacity: 0;
+                    transform: scale(0.95) translateY(-10px);
+                }
+            }
         }
-        .card-inner {
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            transform-style: preserve-3d;
+
+        /* Container Queries: Define responsive scaling container */
+        .adaptive-grid {
+            container-type: inline-size;
+            container-name: grid-container;
         }
-        .card-perspective:hover .card-inner {
-            transform: rotateX(10deg) rotateY(-10deg) translateZ(10px);
-            box-shadow: 0 25px 50px -12px rgba(79, 70, 229, 0.25);
+
+        /* Relational Selector :has() - Style card dynamically when hovered */
+        .feature-card {
+            transition: border-color 0.3s ease;
+            
+            &:has(button:active) {
+                border-color: var(--brand-neon);
+                transform: scale(0.99);
+            }
+        }
+
+        /* Details Content Transition using CSS details-content (Baseline) */
+        details {
+            &::details-content {
+                transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            
+            &[open]::details-content {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Seamless Infinite Marquee */
@@ -60,9 +100,6 @@
         }
         .marquee-track {
             animation: marquee 25s linear infinite;
-        }
-        .marquee-track:hover {
-            animation-play-state: paused;
         }
     </style>
 </head>
@@ -78,16 +115,20 @@
                 <span class="w-2.5 h-2.5 bg-neon rounded-full group-hover:scale-150 transition-transform duration-300"></span>
                 KAIROS
             </a>
+            
+            <!-- Modern Search Landmark Element -->
+            <search class="hidden lg:block w-64">
+                <form action="#" class="relative">
+                    <input type="search" placeholder="Quick search..." class="w-full bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-xs focus:outline-none focus:border-neon text-white">
+                </form>
+            </search>
+
             <nav class="hidden md:flex items-center space-x-8 text-sm font-medium tracking-wider">
                 <a href="index.html" class="text-white border-b border-neon pb-1 transition-all">01. CSS Core</a>
                 <a href="gsap-creative.html" class="text-gray-400 hover:text-white transition-colors duration-200">02. GSAP Storytelling</a>
                 <a href="vanilla-observer.html" class="text-gray-400 hover:text-white transition-colors duration-200">03. High Performance</a>
                 <a href="motion-one.html" class="text-gray-400 hover:text-white transition-colors duration-200">04. Interaction Sandbox</a>
             </nav>
-            <div class="md:hidden">
-                <!-- Simple mobile nav hint -->
-                <span class="text-xs text-neon font-bold px-2 py-1 border border-neon/30 rounded">SWIPE NAVIGATION</span>
-            </div>
         </div>
     </header>
 
@@ -95,150 +136,120 @@
     <main class="pt-32 pb-20 px-6 lg:px-12 max-w-7xl mx-auto">
         <section class="mb-24">
             <div class="max-w-3xl">
-                <span class="text-xs font-bold tracking-widest text-neon uppercase mb-2 block">Part 01 — Pure CSS & Tailwind</span>
+                <span class="text-xs font-bold tracking-widest text-neon uppercase mb-2 block">Part 01 — Modern HTML & CSS Mastered</span>
                 <h1 class="text-4xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 leading-none">
                     Hardware-Accelerated <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-neon">UI Physics</span>
                 </h1>
                 <p class="text-lg text-gray-400 leading-relaxed mb-8">
-                    Discover how standard modern CSS and Tailwind parameters can build dynamic, tactile visual loops that run directly on the browser's GPU compositor, bypassing JavaScript thread congestion entirely.
+                    Discover how native CSS Nesting, `:has()` relational selectors, Popover top-layers, and `@starting-style` discrete transitions create seamless kinetic experiences directly on the GPU.
                 </p>
                 <div class="flex gap-4">
-                    <a href="gsap-creative.html" class="group relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium rounded-lg group bg-gradient-to-br from-indigo-500 to-neon hover:text-white focus:ring-4 focus:outline-none focus:ring-indigo-800">
-                        <span class="relative px-6 py-3 transition-all ease-in duration-700 bg-dark rounded-md group-hover:bg-opacity-0 text-white font-semibold">
-                            Continue to GSAP Page &rarr;
-                        </span>
+                    <a href="encyclopedia.html" class="px-6 py-3 bg-neon hover:bg-neon/90 text-white font-semibold rounded-lg text-sm transition-colors shadow-lg shadow-neon/10">
+                        View Complete Encyclopedia &rarr;
                     </a>
                 </div>
             </div>
         </section>
 
         <!-- Feature Grid (CSS Demos) -->
-        <section class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-24">
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-24 adaptive-grid">
             
-            <!-- Showcase 1: 3D Perspective Card -->
-            <div class="card-perspective">
-                <div class="card-inner relative overflow-hidden rounded-2xl border border-white/5 bg-gradient-to-b from-white/5 to-white/[0.02] p-8 h-[360px] flex flex-col justify-between">
-                    <div class="absolute -right-16 -top-16 w-48 h-48 bg-accent/20 rounded-full blur-3xl transition-all duration-700 group-hover:scale-125"></div>
-                    <div>
-                        <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center mb-6 border border-white/10">
-                            <svg class="w-6 h-6 text-accentLight animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" />
-                            </svg>
+            <!-- Showcase 1: Popover API & Starting Style Tooltip -->
+            <div class="feature-card rounded-2xl border border-white/5 bg-gradient-to-b from-white/5 to-white/[0.02] p-8 h-[360px] flex flex-col justify-between">
+                <div>
+                    <h3 class="text-2xl font-bold text-white mb-6">Native Top-Layer Popover</h3>
+                    <div class="relative inline-block">
+                        <!-- Popover trigger target -->
+                        <button popovertarget="tech-popover" class="px-6 py-3 rounded-lg border border-white/10 bg-white/5 text-white font-medium hover:bg-white/10 transition-colors">
+                            Reveal Top-Layer Popover
+                        </button>
+                        <!-- Native popover target container -->
+                        <div id="tech-popover" popover class="w-72 bg-dark/95 border border-white/10 backdrop-blur-xl rounded-xl p-5 text-xs shadow-2xl text-center text-white">
+                            <span class="font-bold text-neon uppercase tracking-wider mb-2 block">Top-Layer Promotion</span>
+                            <p class="text-gray-300 leading-relaxed">
+                                This popover is rendered directly in the browser's <strong>Top Layer</strong>. It bypasses any parent `z-index` or overflow clipping entirely, animated smoothly with `@starting-style`.
+                            </p>
                         </div>
-                        <h3 class="text-2xl font-bold text-white mb-3">GPU-Accelerated 3D Transform</h3>
-                        <p class="text-sm text-gray-400 leading-relaxed">
-                            Hover on this card. It rotates beautifully in 3D perspective. By restricting variables to `transform` and `translateZ`, we execute at 120fps with zero layout reflows.
-                        </p>
                     </div>
-                    <div class="text-xs text-neon font-bold tracking-widest uppercase">
-                        CSS PERSPECTIVE &middot; COMPOSITED
-                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed mt-6">
+                        No JavaScript libraries or coordinate math are required. Clicking outside dismisses the popover natively.
+                    </p>
+                </div>
+                <div class="text-xs text-neon font-bold tracking-widest uppercase">
+                    POPOVER API &middot; STARTING STYLE
                 </div>
             </div>
 
-            <!-- Showcase 2: Fluid Height Accordion (CSS Grid) -->
-            <div class="flex flex-col justify-between rounded-2xl border border-white/5 bg-gradient-to-b from-white/5 to-white/[0.02] p-8 h-[360px]">
+            <!-- Showcase 2: Exclusive Accordion (details name) -->
+            <div class="feature-card rounded-2xl border border-white/5 bg-gradient-to-b from-white/5 to-white/[0.02] p-8 h-[360px] flex flex-col justify-between">
                 <div>
-                    <h3 class="text-2xl font-bold text-white mb-6">CSS-Only height: auto Transition</h3>
+                    <h3 class="text-2xl font-bold text-white mb-4">Exclusive Accordion Group</h3>
                     
-                    <!-- Accordion Item 1 -->
-                    <div class="border-b border-white/5 pb-4 mb-4">
-                        <button class="w-full flex justify-between items-center text-left py-2 font-semibold text-white focus:outline-none" onclick="this.nextElementSibling.classList.toggle('expanded'); this.querySelector('svg').classList.toggle('rotate-180')">
-                            <span>How is height: auto animated without JS?</span>
-                            <svg class="h-5 w-5 transform transition-transform duration-300 ease-out text-neon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-                        <!-- Grid Row Transition -->
-                        <div class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] [&.expanded]:grid-template-rows-[1fr]">
-                            <div class="overflow-hidden">
-                                <div class="pt-3 text-sm text-gray-400 leading-relaxed">
-                                    Modern browsers let us transition `grid-template-rows` from `0fr` to `1fr`. This allows smooth dynamic height expansions of nested children without absolute pixel declarations.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="space-y-3">
+                        <!-- Exclusive Details Accordion 1 -->
+                        <details name="main-group" open class="border border-white/5 bg-white/[0.01] rounded-lg p-3">
+                            <summary class="cursor-pointer text-sm font-semibold text-white focus:outline-none select-none">
+                                How is grouping achieved?
+                            </summary>
+                            <p class="text-xs text-gray-400 leading-relaxed mt-2 pl-1">
+                                By placing the same `name` attribute on siblings. Opening one closes the other natively, animated cleanly via `::details-content`.
+                            </p>
+                        </details>
 
-                    <!-- Accordion Item 2 -->
-                    <div>
-                        <button class="w-full flex justify-between items-center text-left py-2 font-semibold text-white focus:outline-none" onclick="this.nextElementSibling.classList.toggle('expanded'); this.querySelector('svg').classList.toggle('rotate-180')">
-                            <span>What makes this highly performant?</span>
-                            <svg class="h-5 w-5 transform transition-transform duration-300 ease-out text-neon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-                        <div class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] [&.expanded]:grid-template-rows-[1fr]">
-                            <div class="overflow-hidden">
-                                <div class="pt-3 text-sm text-gray-400 leading-relaxed">
-                                    It utilizes native CSS layout engine calculations. There are no recalculations in main-thread scripting, preventing frame skipping during heavy visual tasks.
-                                </div>
-                            </div>
-                        </div>
+                        <!-- Exclusive Details Accordion 2 -->
+                        <details name="main-group" class="border border-white/5 bg-white/[0.01] rounded-lg p-3">
+                            <summary class="cursor-pointer text-sm font-semibold text-white focus:outline-none select-none">
+                                Is browser support complete?
+                            </summary>
+                            <p class="text-xs text-gray-400 leading-relaxed mt-2 pl-1">
+                                Yes! This feature is fully supported in 2025/2026 as part of Baseline web standards.
+                            </p>
+                        </details>
                     </div>
                 </div>
                 <div class="text-xs text-neon font-bold tracking-widest uppercase">
-                    GRID LAYOUT ENGINE &middot; ZERO-JS
+                    DETAILS NAME &middot; NO-JS ACCORDION
                 </div>
             </div>
 
-            <!-- Showcase 3: Elastic Spring Toggle & Tactile Action Buttons -->
-            <div class="rounded-2xl border border-white/5 bg-gradient-to-b from-white/5 to-white/[0.02] p-8 h-[360px] flex flex-col justify-between">
+            <!-- Showcase 3: Relational CSS State Selector (:has) -->
+            <div class="feature-card rounded-2xl border border-white/5 bg-gradient-to-b from-white/5 to-white/[0.02] p-8 h-[360px] flex flex-col justify-between">
                 <div>
-                    <h3 class="text-2xl font-bold text-white mb-6">Tactile Action States</h3>
+                    <h3 class="text-2xl font-bold text-white mb-6">Relational Child/Parent Styling (:has)</h3>
                     <div class="flex flex-wrap gap-8 items-center">
-                        <!-- Custom Elastic Spring Toggle -->
-                        <div class="flex items-center gap-4">
-                            <span class="text-sm font-semibold">Liquid Switch</span>
-                            <label class="relative inline-flex items-center cursor-pointer select-none">
-                                <input type="checkbox" class="sr-only peer" />
-                                <div class="w-16 h-9 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:bg-accent transition-colors duration-300
-                                            after:content-[''] after:absolute after:top-[6px] after:left-[6px] after:bg-white after:rounded-full after:h-6 after:w-6 
-                                            after:transition-all after:duration-300 after:cubic-bezier(0.175, 0.885, 0.32, 1.275)
-                                            peer-checked:after:translate-x-7 active:after:w-9"></div>
-                            </label>
-                        </div>
-
-                        <!-- Tactile Press Button -->
-                        <div class="flex flex-col gap-1">
-                            <span class="text-xs text-gray-400 font-semibold mb-2">3D Press State</span>
-                            <button class="group relative inline-block focus:outline-none rounded-lg">
-                                <span class="absolute inset-0 w-full h-full transition-all duration-200 ease-out transform translate-y-1 translate-x-1 bg-accent/80 rounded-lg group-hover:translate-y-1.5 group-hover:translate-x-1.5 group-active:translate-y-0 group-active:translate-x-0"></span>
-                                <span class="relative inline-block w-full px-5 py-2.5 font-semibold text-white bg-accent rounded-lg transform transition-transform duration-100 ease-out group-active:translate-y-1 group-active:translate-x-1 border border-white/10">
-                                    Tap Button
-                                </span>
+                        <div class="p-4 border border-white/5 bg-white/[0.01] rounded-xl w-full flex justify-between items-center">
+                            <span class="text-sm font-semibold">Active State Indicator</span>
+                            <button class="px-5 py-2.5 bg-accent hover:bg-accentLight text-white rounded-lg text-xs font-bold transition-all active:scale-95">
+                                Tap to Mutate Parent
                             </button>
                         </div>
                     </div>
                     <p class="text-sm text-gray-400 leading-relaxed mt-6">
-                        Interact with the items above. Both utilize standard cubic-bezier variables and transform scaling to provide instant, tactile confirmation.
+                        Press and hold the button. The entire card parent's border color transitions to neon orange instantly. This is powered by `.feature-card:has(button:active)`.
                     </p>
                 </div>
                 <div class="text-xs text-neon font-bold tracking-widest uppercase">
-                    TACTILE REACTION &middot; SPRING CUBIC
+                    RELATIONAL SELECTOR &middot; :HAS()
                 </div>
             </div>
 
-            <!-- Showcase 4: Custom Gradient Glass Tooltip -->
-            <div class="rounded-2xl border border-white/5 bg-gradient-to-b from-white/5 to-white/[0.02] p-8 h-[360px] flex flex-col justify-between">
+            <!-- Showcase 4: OKLCH and Relative Color Syntax (RCS) -->
+            <div class="feature-card rounded-2xl border border-white/5 bg-gradient-to-b from-white/5 to-white/[0.02] p-8 h-[360px] flex flex-col justify-between">
                 <div>
-                    <h3 class="text-2xl font-bold text-white mb-6">Interactive Layer Disclosures</h3>
-                    <div class="relative inline-block group">
-                        <button class="px-6 py-3 rounded-lg border border-white/10 bg-white/5 text-white font-medium hover:bg-white/10 transition-colors">
-                            Hover to Reveal Glass Tooltip
-                        </button>
-                        <!-- Tooltip with micro-animation -->
-                        <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 w-64 bg-dark/95 border border-white/10 backdrop-blur-xl rounded-xl p-4 text-xs shadow-2xl opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] text-center">
-                            <span class="font-bold text-neon uppercase tracking-wider mb-1 block">Contextual Popover</span>
-                            <span class="text-gray-300 leading-relaxed">This card reveals seamlessly using a highly refined, low-duration easing curve.</span>
-                            <div class="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1 border-4 border-transparent border-t-white/10"></div>
+                    <h3 class="text-2xl font-bold text-white mb-6">OKLCH and Relative Color Syntax</h3>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-[oklch(65%_0.3_35)] shadow-lg shadow-[oklch(65%_0.3_35/0.25)]"></div>
+                        <div class="text-xs">
+                            <span class="font-bold text-white block">Origin Color: OKLCH Orange</span>
+                            <span class="text-gray-400">Lightness: 65%, Chroma: 0.3, Hue: 35deg</span>
                         </div>
                     </div>
                     <p class="text-sm text-gray-400 leading-relaxed mt-6">
-                        Tooltip entries should have a slight spatial upward offset when transitioning. This cues the user's focus naturally to the source container.
+                        Using Relative Color Syntax, we calculate the card's active/disabled tints on the fly (e.g. `rgb(from var(--brand-neon) r g b / 0.15)`) for uniform design token scaling.
                     </p>
                 </div>
                 <div class="text-xs text-neon font-bold tracking-widest uppercase">
-                    CONTEXT DISCLOSURE &middot; SMOOTH OPACITY
+                    OKLCH COLOR SYSTEM &middot; RCS
                 </div>
             </div>
 
@@ -248,36 +259,36 @@
         <section class="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden py-12 bg-white/5 border-y border-white/5">
             <div class="flex overflow-hidden select-none whitespace-nowrap">
                 <div class="marquee-track flex gap-12 text-5xl lg:text-8xl font-black tracking-tighter text-white/15 uppercase">
-                    <span>Hardware Compositing</span>
+                    <span>Modern Popovers</span>
                     <span>&middot;</span>
-                    <span>Zero Layout Shifts</span>
+                    <span>Relational Has Selectors</span>
                     <span>&middot;</span>
-                    <span>120 FPS Rendering</span>
+                    <span>Oklch Palette Tokens</span>
                     <span>&middot;</span>
-                    <span>Pure Native CSS</span>
+                    <span>Starting Style Entries</span>
                     <span>&middot;</span>
-                    <!-- Duplicate for seamless looping -->
-                    <span>Hardware Compositing</span>
+                    <!-- Duplicate -->
+                    <span>Modern Popovers</span>
                     <span>&middot;</span>
-                    <span>Zero Layout Shifts</span>
+                    <span>Relational Has Selectors</span>
                     <span>&middot;</span>
-                    <span>120 FPS Rendering</span>
+                    <span>Oklch Palette Tokens</span>
                     <span>&middot;</span>
-                    <span>Pure Native CSS</span>
+                    <span>Starting Style Entries</span>
                     <span>&middot;</span>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Simple footer with navigation links -->
+    <!-- Footer -->
     <footer class="border-t border-white/5 py-12 bg-dark/60 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="text-sm text-gray-500">
                 &copy; 2026 KAIROS. Designed for high performance.
             </div>
             <div class="flex gap-6 text-sm">
-                <a href="gsap-creative.html" class="text-neon font-bold hover:underline">Page 02: GSAP Storytelling &rarr;</a>
+                <a href="encyclopedia.html" class="text-neon font-bold hover:underline">Page 05: Motion Encyclopedia &rarr;</a>
             </div>
         </div>
     </footer>
