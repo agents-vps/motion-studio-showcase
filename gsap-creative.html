@@ -57,7 +57,18 @@
             scrollbar-width: thin;
             scrollbar-color: var(--brand-accent) #0B0B0C;
         }
+    
+        @view-transition {
+            navigation: auto;
+        }
+        .brand-logo-transition {
+            view-transition-name: brand-logo;
+        }
+        .nav-menu-transition {
+            view-transition-name: nav-menu;
+        }
     </style>
+    <script src="tactile-feedback.js" defer></script>
 </head>
 <body class="bg-dark text-titanium min-h-screen font-sans antialiased overflow-x-hidden select-none">
 
@@ -68,11 +79,11 @@
     <!-- Main Navigation Header -->
     <header class="fixed top-0 left-0 w-full z-40 bg-dark/80 backdrop-blur-md border-b border-white/5 px-6 lg:px-12 py-4">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="index.html" class="text-xl font-bold tracking-widest text-white flex items-center gap-2 group">
+            <a href="index.html" class="text-xl font-bold tracking-widest text-white flex items-center gap-2 group brand-logo-transition">
                 <span class="w-2.5 h-2.5 bg-neon rounded-full group-hover:scale-150 transition-transform duration-300"></span>
                 KAIROS
             </a>
-            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium tracking-wider">
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium tracking-wider nav-menu-transition">
                 <a href="index.html" class="text-gray-400 hover:text-white transition-colors duration-200">01. CSS Core</a>
                 <a href="gsap-creative.html" class="text-white border-b border-neon pb-1 transition-all">02. GSAP Storytelling</a>
                 <a href="vanilla-observer.html" class="text-gray-400 hover:text-white transition-colors duration-200">03. High Performance</a>
