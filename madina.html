@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MADINA.KINETICS | Automations & Design Spatial — Martinique</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#070708',
+                        mint: 'oklch(80% 0.28 162)', // Pure Caribbean Neon Mint
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 2-Color Design System Constraints */
+        :root {
+            --color-obsidian: #070708;
+            --color-mint: oklch(80% 0.28 162);
+            --color-mint-alpha: rgb(from oklch(80% 0.28 162) r g b / 0.1);
+        }
+
+        @view-transition {
+            navigation: auto;
+        }
+
+        body {
+            background-color: var(--color-obsidian);
+            color: var(--color-mint);
+        }
+
+        /* Continuous Scroll Bar in Mint */
+        @keyframes scroll-tracker {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+        .scroll-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background-color: var(--color-mint);
+            transform-origin: 0% 50%;
+            z-index: 100;
+            animation: scroll-tracker auto linear;
+            animation-timeline: scroll(root);
+        }
+
+        /* Selection and Focus rings mapped to Mint color */
+        ::selection {
+            background-color: var(--color-mint);
+            color: var(--color-obsidian);
+        }
+
+        /* Custom Inertial Pointer Ring */
+        .cursor-ring {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--color-mint);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+        /* Native CSS Nesting for Minimalist Cards */
+        .k-card {
+            border: 1px solid var(--color-mint);
+            background-color: transparent;
+            transition: background-color 0.3s, transform 0.3s;
+            
+            &:hover {
+                background-color: var(--color-mint-alpha);
+                transform: translateY(-4px);
+            }
+        }
+
+        /* Interactive Chat Popover (Bottom-Right) Entrance */
+        #chat-widget {
+            border: 1px solid var(--color-mint);
+            background-color: var(--color-obsidian);
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), display 0.35s cubic-bezier(0.16, 1, 0.3, 1) allow-discrete;
+            
+            &:popover-open {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                
+                @starting-style {
+                    opacity: 0;
+                    transform: translateY(20px) scale(0.95);
+                }
+            }
+        }
+
+        /* Dynamic Pipeline Pulse Wave */
+        @keyframes pulse-wave {
+            0% { left: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+        .pipeline-pulse {
+            position: absolute;
+            height: 2px;
+            width: 80px;
+            background: linear-gradient(90deg, transparent, var(--color-mint), transparent);
+            animation: pulse-wave 2s linear infinite;
+        }
+    </style>
+    <!-- Load shared multi-sensory global clicks -->
+    <script src="tactile-feedback.js" defer></script>
+</head>
+<body class="min-h-screen font-mono antialiased overflow-x-hidden selection:bg-mint selection:text-obsidian">
+
+    <!-- Custom Cursor Ring -->
+    <div class="cursor-ring hidden md:block" id="cursor-ring"></div>
+
+    <!-- Scroll Line -->
+    <div class="scroll-line"></div>
+
+    <!-- Minimal Header -->
+    <header class="fixed top-0 left-0 w-full z-40 bg-obsidian/90 backdrop-blur-md border-b border-mint/20 px-6 lg:px-12 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="madina.html" class="text-lg font-bold tracking-widest flex items-center gap-2 group">
+                <span class="w-3 h-3 bg-mint rounded-full group-hover:scale-150 transition-transform"></span>
+                MADINA.KINETICS
+            </a>
+            
+            <nav class="hidden md:flex items-center space-x-8 text-[10px] tracking-widest uppercase">
+                <a href="#services" class="hover:underline">01. Solutions</a>
+                <a href="#pipeline" class="hover:underline">02. Démo Live</a>
+                <a href="#work" class="hover:underline">03. Réalisations</a>
+                <a href="#contact" class="hover:underline">04. Briefing</a>
+            </nav>
+
+            <span class="text-[9px] border border-mint/30 px-2 py-1 rounded text-mint font-bold uppercase tracking-wider">
+                FDF, MARTINIQUE &middot; 14&deg;N
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Hero -->
+    <main class="pt-40 px-6 lg:px-12 max-w-7xl mx-auto">
+        
+        <!-- Hero Section -->
+        <section class="mb-32 relative">
+            <div class="max-w-4xl">
+                <span class="text-xs font-bold tracking-widest uppercase mb-4 block text-mint/80">// AGENCE D'INTELLIGENCE & AUTOMATIONS</span>
+                <h1 class="text-4xl lg:text-8xl font-bold tracking-tighter leading-none mb-8">
+                    Nous automatisons le futur de <span class="bg-mint text-obsidian px-2">la Martinique</span> et du monde.
+                </h1>
+                <p class="text-base lg:text-xl text-mint/80 max-w-2xl leading-relaxed mb-8">
+                    MADINA.KINETICS conçoit des écosystèmes autonomes, des sites web cinétiques et des bots d'IA sur-mesure pour libérer vos équipes des tâches répétitives.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <button popovertarget="chat-widget" class="px-6 py-3 border border-mint bg-mint text-obsidian font-bold text-xs uppercase tracking-widest hover:bg-transparent hover:text-mint transition-colors">
+                        Parler à Madina Bot
+                    </button>
+                    <a href="#pipeline" class="px-6 py-3 border border-mint text-mint font-bold text-xs uppercase tracking-widest hover:bg-mint/10 transition-colors">
+                        Simuler un Workflow &rarr;
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="mb-32 border-t border-mint/20 pt-16">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <div class="lg:col-span-4">
+                    <span class="text-xs font-bold tracking-widest uppercase mb-2 block">// 01 &bull; SOLUTIONS CLÉS</span>
+                    <h2 class="text-3xl font-bold tracking-tight uppercase">Nos Disciplines</h2>
+                </div>
+                <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <div class="k-card p-8 rounded-2xl flex flex-col justify-between h-[240px]">
+                        <span class="text-xs font-bold opacity-60">A &bull; AUTOMATION</span>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Automations de Workflows</h3>
+                            <p class="text-xs opacity-80 leading-relaxed">
+                                Connexion de vos outils (CRM, ERP, WhatsApp) pour synchroniser vos données clients en temps réel sans intervention humaine.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="k-card p-8 rounded-2xl flex flex-col justify-between h-[240px]">
+                        <span class="text-xs font-bold opacity-60">B &bull; BOT CREATION</span>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Création de Bots d'IA</h3>
+                            <p class="text-xs opacity-80 leading-relaxed">
+                                Agents conversationnels intelligents formés sur vos données d'entreprise pour qualifier vos leads et répondre 24h/7j sur WhatsApp ou Web.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="k-card p-8 rounded-2xl flex flex-col justify-between h-[240px]">
+                        <span class="text-xs font-bold opacity-60">C &bull; WEB DESIGN</span>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Web Design Cinétique</h3>
+                            <p class="text-xs opacity-80 leading-relaxed">
+                                Plateformes web immersives, minimalistes et performantes, construites avec les standards d'animation les plus fluides de l'industrie.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="k-card p-8 rounded-2xl flex flex-col justify-between h-[240px]">
+                        <span class="text-xs font-bold opacity-60">D &bull; DATA PIPELINES</span>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Extraction & Reporting</h3>
+                            <p class="text-xs opacity-80 leading-relaxed">
+                                Grattage et synchronisation automatisée de données concurrentielles pour nourrir vos tableaux de bord décisionnels.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Interactive Simulation Builder -->
+        <section id="pipeline" class="mb-32 border-t border-mint/20 pt-16">
+            <span class="text-xs font-bold tracking-widest uppercase mb-2 block">// 02 &bull; COMPRENDRE LE FLUX</span>
+            <h2 class="text-3xl font-bold uppercase mb-8">Simulation d'Automation Live</h2>
+            
+            <div class="p-8 border border-mint rounded-3xl bg-mint/5 relative overflow-hidden flex flex-col justify-between min-h-[380px]">
+                <div class="absolute inset-0 bg-[radial-gradient(oklch(80%_0.28_162/0.05)_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                
+                <div class="z-10 flex justify-between items-center text-xs opacity-60">
+                    <span>SCHEMA SÉQUENTIEL</span>
+                    <span id="pipeline-status">En attente d'impulsion...</span>
+                </div>
+
+                <!-- Live Node Row -->
+                <div class="z-10 grid grid-cols-1 md:grid-cols-4 gap-6 items-center my-8 relative">
+                    <!-- Laser pulse line -->
+                    <div class="absolute inset-x-0 top-1/2 h-[2px] bg-mint/10 hidden md:block" id="connector-line">
+                        <div class="pipeline-pulse hidden" id="laser-pulse"></div>
+                    </div>
+
+                    <!-- Node 1 -->
+                    <div class="node p-4 border border-mint rounded-xl bg-obsidian text-center transition-all duration-300" id="node-1">
+                        <span class="text-[10px] block opacity-60">DECLENCHEUR</span>
+                        <h4 class="text-xs font-bold uppercase mt-1">Lead Form Submit</h4>
+                    </div>
+
+                    <!-- Node 2 -->
+                    <div class="node p-4 border border-mint/20 rounded-xl bg-obsidian text-center opacity-40 transition-all duration-300" id="node-2">
+                        <span class="text-[10px] block opacity-60">BETA BOT IA</span>
+                        <h4 class="text-xs font-bold uppercase mt-1">Qualification Madina</h4>
+                    </div>
+
+                    <!-- Node 3 -->
+                    <div class="node p-4 border border-mint/20 rounded-xl bg-obsidian text-center opacity-40 transition-all duration-300" id="node-3">
+                        <span class="text-[10px] block opacity-60">CRM SYNC</span>
+                        <h4 class="text-xs font-bold uppercase mt-1">Airtable Update</h4>
+                    </div>
+
+                    <!-- Node 4 -->
+                    <div class="node p-4 border border-mint/20 rounded-xl bg-obsidian text-center opacity-40 transition-all duration-300" id="node-4">
+                        <span class="text-[10px] block opacity-60">NOTIFICATION</span>
+                        <h4 class="text-xs font-bold uppercase mt-1">WhatsApp Alert</h4>
+                    </div>
+                </div>
+
+                <div class="z-10 flex justify-between items-center">
+                    <button onclick="runPipeline()" class="px-6 py-3 border border-mint bg-mint text-obsidian font-bold text-xs uppercase tracking-widest hover:bg-transparent hover:text-mint transition-colors">
+                        Lancer l'Automation &raquo;
+                    </button>
+                    <span class="text-[10px] uppercase font-bold tracking-widest">Calculé localement &middot; 0ms latence</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Briefing / Contact Form -->
+        <section id="contact" class="mb-32 border-t border-mint/20 pt-16">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <div class="lg:col-span-4">
+                    <span class="text-xs font-bold tracking-widest uppercase mb-2 block">// 03 &bull; CONTACT DIRECT</span>
+                    <h2 class="text-3xl font-bold tracking-tight uppercase mb-6">Briefez-nous</h2>
+                    <p class="text-xs opacity-70 leading-relaxed">
+                        Partagez votre besoin. Notre équipe d'automatisation analyse votre workflow et conçoit votre solution sur-mesure depuis la Martinique.
+                    </p>
+                </div>
+                
+                <div class="lg:col-span-8">
+                    <!-- Standard form layout using mint borders -->
+                    <form action="#" class="border border-mint p-8 rounded-3xl flex flex-col gap-6" id="brief-form">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="text-[10px] uppercase tracking-wider block mb-2 opacity-60">Votre Nom</label>
+                                <input type="text" placeholder="Alexandre" required class="w-full bg-transparent border-b border-mint/40 focus:border-mint py-2 text-sm focus:outline-none transition-colors">
+                            </div>
+                            <div>
+                                <label class="text-[10px] uppercase tracking-wider block mb-2 opacity-60">Adresse Email</label>
+                                <input type="email" placeholder="contact@domaine.com" required class="w-full bg-transparent border-b border-mint/40 focus:border-mint py-2 text-sm focus:outline-none transition-colors">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-[10px] uppercase tracking-wider block mb-2 opacity-60">Quelle solution recherchez-vous ?</label>
+                            <select class="w-full bg-obsidian border-b border-mint/40 focus:border-mint py-2 text-sm focus:outline-none transition-colors text-mint">
+                                <option value="automation">Automatisation de processus (Zapier/Make/Custom)</option>
+                                <option value="bot">Création de Bot conversationnel WhatsApp/IA</option>
+                                <option value="design">Web Design Cinétique & Immersif</option>
+                                <option value="all">Écosystème complet (Automation + Bot + Web)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="text-[10px] uppercase tracking-wider block mb-2 opacity-60">Description du workflow à automatiser</label>
+                            <textarea rows="4" placeholder="Ex: Synchroniser mes formulaires de site avec Airtable et envoyer une alerte automatique WhatsApp à mon équipe commerciale..." required class="w-full bg-transparent border border-mint/30 rounded-xl p-4 text-sm focus:outline-none focus:border-mint transition-colors bg-obsidian"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 bg-mint text-obsidian hover:bg-transparent hover:text-mint border border-mint font-bold text-xs uppercase tracking-widest transition-colors rounded-xl">
+                            Transmettre le Briefing Technique
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- INTERACTIVE CREOLE CHATBOT WIDGET (Bottom Right) -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <!-- Pulse Glow floating button -->
+        <button popovertarget="chat-widget" class="w-14 h-14 rounded-full bg-mint text-obsidian flex items-center justify-center shadow-2xl focus:outline-none select-none hover:scale-105 transition-transform active:scale-95">
+            <svg class="h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+        </button>
+
+        <!-- Popover container -->
+        <div id="chat-widget" popover class="fixed bottom-24 right-6 h-[480px] w-[340px] md:w-[380px] rounded-3xl p-6 flex flex-col justify-between shadow-2xl select-none">
+            <div class="flex justify-between items-center border-b border-mint/20 pb-3">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-ping"></span>
+                    <div class="text-left">
+                        <span class="text-xs font-bold text-white block leading-none">Madina Bot 🤖</span>
+                        <span class="text-[9px] opacity-60">Creole Assistant Suite &middot; Online</span>
+                    </div>
+                </div>
+                <button popovertarget="chat-widget" popovertargetaction="hide" class="text-[10px] opacity-60 hover:opacity-100">[ Fermer ]</button>
+            </div>
+
+            <!-- Chat log -->
+            <div class="flex-1 my-4 overflow-y-auto space-y-3 text-xs pr-1 scrollbar-none" id="chat-history">
+                <div class="text-left bg-mint/10 p-3 rounded-2xl rounded-tl-none border border-mint/15 leading-relaxed max-w-[85%]">
+                    Sa ka fèt ! 👋 Bienvenue chez <strong>MADINA.KINETICS</strong>. 
+                    Je suis l'assistant virtuel d'automatisation des Antilles. Comment puis-je propulser votre entreprise ?
+                </div>
+            </div>
+
+            <!-- Quick replies -->
+            <div class="flex flex-wrap gap-2 mb-3" id="quick-replies">
+                <button onclick="sendQuickReply('Créer un Bot IA')" class="px-2.5 py-1 border border-mint/30 rounded-full hover:border-mint text-[9px] uppercase tracking-wider transition-colors">Créer un Bot IA</button>
+                <button onclick="sendQuickReply('Automatiser mon CRM')" class="px-2.5 py-1 border border-mint/30 rounded-full hover:border-mint text-[9px] uppercase tracking-wider transition-colors">Automatiser mon CRM</button>
+                <button onclick="sendQuickReply('Devis site web')" class="px-2.5 py-1 border border-mint/30 rounded-full hover:border-mint text-[9px] uppercase tracking-wider transition-colors">Devis Site Web</button>
+            </div>
+
+            <!-- Input area -->
+            <form action="#" class="flex gap-2" id="chat-form">
+                <input type="text" id="chat-input" placeholder="Écrivez votre message..." class="flex-1 bg-transparent border border-mint/30 focus:border-mint text-xs rounded-xl px-4 py-2.5 focus:outline-none transition-colors text-white">
+                <button type="submit" class="px-4 bg-mint text-obsidian font-bold text-xs uppercase rounded-xl tracking-wider hover:bg-mint/80 transition-colors">Go</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-mint/20 py-12 bg-obsidian">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-mint/60">
+            <div>
+                &copy; 2026 MADINA.KINETICS. Fort-de-France, Martinique &middot; Tous droits réservés.
+            </div>
+            <div class="flex gap-6 font-bold">
+                <a href="index.html" class="text-mint hover:underline">&larr; Retour au hub</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- GSAP for custom cursor -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script>
+        // 1. Inertial ring pointer
+        const ring = document.getElementById('cursor-ring');
+        let mouse = { x: -100, y: -100 };
+        let ringPos = { x: -100, y: -100 };
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        gsap.ticker.add(() => {
+            ringPos.x += (mouse.x - ringPos.x) * 0.15;
+            ringPos.y += (mouse.y - ringPos.y) * 0.15;
+            gsap.set(ring, { x: ringPos.x, y: ringPos.y });
+        });
+
+        // Expanded cursor on clickable
+        document.querySelectorAll('button, a, summary, select').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                gsap.to(ring, { width: 56, height: 56, duration: 0.3, ease: 'power2.out' });
+            });
+            el.addEventListener('mouseleave', () => {
+                gsap.to(ring, { width: 40, height: 40, duration: 0.3, ease: 'power2.out' });
+            });
+        });
+
+        // 2. Interactive Pipeline Animation
+        function runPipeline() {
+            const status = document.getElementById('pipeline-status');
+            const pulse = document.getElementById('laser-pulse');
+            
+            const n1 = document.getElementById('node-1');
+            const n2 = document.getElementById('node-2');
+            const n3 = document.getElementById('node-3');
+            const n4 = document.getElementById('node-4');
+
+            status.innerText = "Traitement déclenché...";
+            status.classList.add('text-white');
+            pulse.classList.remove('hidden');
+
+            // Sequential triggering
+            setTimeout(() => {
+                n1.classList.add('bg-mint/20');
+                status.innerText = "Nœud 1 validé. Envoi vers le Bot d'IA...";
+            }, 0);
+
+            setTimeout(() => {
+                n2.classList.remove('opacity-40');
+                n2.classList.add('bg-mint/20');
+                status.innerText = "Bot d'IA connecté. Qualification complétée...";
+            }, 800);
+
+            setTimeout(() => {
+                n3.classList.remove('opacity-40');
+                n3.classList.add('bg-mint/20');
+                status.innerText = "CRM synchronisé avec Airtable...";
+            }, 1600);
+
+            setTimeout(() => {
+                n4.classList.remove('opacity-40');
+                n4.classList.add('bg-mint/20');
+                status.innerText = "Alerte de notification transmise sur WhatsApp ! ✓";
+            }, 2400);
+
+            // Clean up reset
+            setTimeout(() => {
+                [n1, n2, n3, n4].forEach(n => {
+                    n.classList.remove('bg-mint/20');
+                });
+                [n2, n3, n4].forEach(n => {
+                    n.classList.add('opacity-40');
+                });
+                pulse.classList.add('hidden');
+                status.innerText = "Automation complétée avec succès.";
+                status.classList.remove('text-white');
+            }, 5000);
+        }
+
+        // 3. Dynamic Creole AI Assistant chatbot logic
+        const chatHistory = document.getElementById('chat-history');
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+
+        const botReplies = {
+            "bot": "Les Bots d'IA de MADINA.KINETICS qualifient vos prospects en français et créole antillais, se connectent à vos agendas et vendent vos offres 24h/7j de manière autonome sur WhatsApp et Messenger.",
+            "crm": "Nous synchronisons Airtable, Hubspot, Salesforce, ou vos BDD avec Make et Zapier. Vos fiches clients s'actualisent sans erreur de frappe.",
+            "devis": "Super ! Transmettez-nous vos coordonnées et la description de vos besoins dans le formulaire de briefing technique situé sur la gauche, ou laissez votre email ici. Nous vous répondrons en moins de 12 heures !",
+            "default": "D'accord ! Nos experts d'Antilles Web & Automations conçoivent des solutions adaptées à votre activité martiniquaise. Pouvez-vous décrire précisément votre besoin ?"
+        };
+
+        function addMessage(text, isUser = false) {
+            const bubble = document.createElement('div');
+            bubble.className = isUser 
+                ? "text-right bg-mint text-obsidian p-3 rounded-2xl rounded-tr-none ml-auto max-w-[85%] font-bold leading-relaxed"
+                : "text-left bg-mint/10 p-3 rounded-2xl rounded-tl-none border border-mint/15 leading-relaxed max-w-[85%]";
+            bubble.innerHTML = text;
+            chatHistory.appendChild(bubble);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        function handleBotAnswer(userText) {
+            const query = userText.toLowerCase();
+            let reply = botReplies.default;
+
+            if (query.includes('bot') || query.includes('ia') || query.includes('agent')) {
+                reply = botReplies.bot;
+            } else if (query.includes('crm') || query.includes('autom') || query.includes('airtable')) {
+                reply = botReplies.crm;
+            } else if (query.includes('devis') || query.includes('tarif') || query.includes('prix') || query.includes('site')) {
+                reply = botReplies.devis;
+            }
+
+            setTimeout(() => {
+                addMessage(reply, false);
+            }, 600);
+        }
+
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            addMessage(text, true);
+            chatInput.value = "";
+            handleBotAnswer(text);
+        });
+
+        function sendQuickReply(text) {
+            addMessage(text, true);
+            handleBotAnswer(text);
+        }
+
+        // 4. Brief form shake on submit
+        const form = document.getElementById('brief-form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert("Votre briefing a été reçu par les ingénieurs de MADINA.KINETICS ! Un expert antillais vous contactera sous 12h.");
+            form.reset();
+        });
+    </script>
+</body>
+</html>
