@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAIROS | GSAP Creative Storytelling</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0B0B0C',
+                        titanium: '#E2E2E5',
+                        accent: '#4F46E5', // Deep Indigo
+                        accentLight: '#818CF8',
+                        neon: '#FF5A1F', // Kinetics Orange
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Cursor styling */
+        .custom-cursor {
+            width: 8px;
+            height: 8px;
+            background-color: #FF5A1F;
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        .custom-cursor-ring {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 90, 31, 0.4);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9998;
+        }
+        /* Custom scrollbar to match aesthetic */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0B0C;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4F46E5;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-dark text-titanium min-h-screen font-sans antialiased overflow-x-hidden select-none">
+
+    <!-- Custom Cursor Layers -->
+    <div class="custom-cursor hidden md:block" id="cursor-dot"></div>
+    <div class="custom-cursor-ring hidden md:block" id="cursor-ring"></div>
+
+    <!-- Main Navigation Header -->
+    <header class="fixed top-0 left-0 w-full z-40 bg-dark/80 backdrop-blur-md border-b border-white/5 px-6 lg:px-12 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-xl font-bold tracking-widest text-white flex items-center gap-2 group">
+                <span class="w-2.5 h-2.5 bg-neon rounded-full group-hover:scale-150 transition-transform duration-300"></span>
+                KAIROS
+            </a>
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium tracking-wider">
+                <a href="index.html" class="text-gray-400 hover:text-white transition-colors duration-200">01. CSS Core</a>
+                <a href="gsap-creative.html" class="text-white border-b border-neon pb-1 transition-all">02. GSAP Storytelling</a>
+                <a href="vanilla-observer.html" class="text-gray-400 hover:text-white transition-colors duration-200">03. High Performance</a>
+                <a href="motion-one.html" class="text-gray-400 hover:text-white transition-colors duration-200">04. Interaction Sandbox</a>
+            </nav>
+            <div class="md:hidden">
+                <span class="text-xs text-neon font-bold px-2 py-1 border border-neon/30 rounded">SWIPE NAVIGATION</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="pt-32 pb-12">
+        <section class="max-w-7xl mx-auto px-6 lg:px-12 mb-16">
+            <span class="text-xs font-bold tracking-widest text-neon uppercase mb-2 block">Part 02 — GSAP & ScrollTrigger</span>
+            <h1 class="text-4xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 leading-none">
+                Inertial Storytelling & <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-neon">Horizontal Flow</span>
+            </h1>
+            <p class="text-lg text-gray-400 leading-relaxed max-w-3xl mb-8">
+                Move your cursor to experience custom magnetism. Scroll down to trigger GSAP's layout redirection, converting classic vertical scroll into smooth horizontal gallery navigation.
+            </p>
+        </section>
+
+        <!-- Magnetic Element Interactive Area -->
+        <section class="max-w-7xl mx-auto px-6 lg:px-12 mb-24 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="p-8 border border-white/5 bg-white/[0.01] rounded-2xl flex flex-col justify-between h-[240px]">
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2">Magnetic Attraction</h3>
+                    <p class="text-sm text-gray-400">Move your mouse near the dot. The UI detects spatial proximity and "attracts" the core element with high inertia.</p>
+                </div>
+                <!-- Magnetic Target -->
+                <div class="flex items-center gap-4">
+                    <button class="magnetic-button w-14 h-14 rounded-full bg-accent hover:bg-accentLight text-white flex items-center justify-center transition-colors focus:outline-none shadow-lg">
+                        <svg class="w-5 h-5 pointer-events-none" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                        </svg>
+                    </button>
+                    <span class="text-xs tracking-wider text-gray-500 font-bold uppercase">Hover Me</span>
+                </div>
+            </div>
+
+            <div class="p-8 border border-white/5 bg-white/[0.01] rounded-2xl flex flex-col justify-between h-[240px]">
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2">Custom Cursor Context</h3>
+                    <p class="text-sm text-gray-400">Hovering on elements changes the cursor state. It morphs size, changes opacity, or displays customized indicator states.</p>
+                </div>
+                <div class="flex gap-4">
+                    <button class="cursor-hover-trigger px-5 py-2.5 rounded-lg border border-white/10 hover:border-white/20 hover:bg-white/5 transition-colors text-xs font-semibold uppercase tracking-wider">
+                        Expand Ring
+                    </button>
+                    <button class="cursor-hover-trigger-invert px-5 py-2.5 rounded-lg bg-neon text-white text-xs font-semibold uppercase tracking-wider">
+                        Invert Ring
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-8 border border-white/5 bg-white/[0.01] rounded-2xl flex flex-col justify-between h-[240px]">
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2">Cinematic Entry Reveal</h3>
+                    <p class="text-sm text-gray-400">Every elements on this page stagger in using timeline mechanics. Scroll down to explore the horizontal showcase.</p>
+                </div>
+                <div class="text-xs text-neon font-bold tracking-widest uppercase">
+                    TIMELINE ORCHESTRATION &middot; GSAP
+                </div>
+            </div>
+        </section>
+
+        <!-- Horizontal Scroll Section -->
+        <section class="horizontal-scroll-container bg-black py-20 border-y border-white/5 overflow-hidden">
+            <div class="horizontal-track flex flex-nowrap pl-6 lg:pl-12 gap-8 items-center" style="width: 250vw;">
+                
+                <!-- Info block -->
+                <div class="w-[450px] shrink-0 p-8">
+                    <span class="text-xs font-bold text-neon uppercase tracking-widest block mb-2">PROJECTS EXHIBITION</span>
+                    <h2 class="text-4xl lg:text-5xl font-black tracking-tight text-white mb-4">Spatial Kinetic Concepts</h2>
+                    <p class="text-sm text-gray-400 leading-relaxed mb-6">
+                        This block slides horizontally using GSAP ScrollTrigger. As you scroll vertically, the viewport tracks sideways, mimicking premium high-fashion websites.
+                    </p>
+                    <div class="flex items-center gap-2 text-xs font-bold text-indigo-400">
+                        <span>SCROLL DOWN TO INITIATE</span>
+                        <svg class="w-4 h-4 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-6l-7 7-7-7" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Card 1 -->
+                <div class="w-[400px] h-[500px] shrink-0 rounded-2xl overflow-hidden border border-white/10 relative group">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" alt="Villa Titanium" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/40 to-transparent p-8 flex flex-col justify-end">
+                        <span class="text-xs font-semibold text-neon tracking-wider mb-1 uppercase">01 &middot; Titanium Villa</span>
+                        <h3 class="text-2xl font-bold text-white mb-2">Aetheris Sanctuary</h3>
+                        <p class="text-xs text-gray-400">Brutalist architecture paired with dynamic light projection loops.</p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="w-[400px] h-[500px] shrink-0 rounded-2xl overflow-hidden border border-white/10 relative group">
+                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80" alt="Lumina Pavilion" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/40 to-transparent p-8 flex flex-col justify-end">
+                        <span class="text-xs font-semibold text-neon tracking-wider mb-1 uppercase">02 &middot; Lumina Pavilion</span>
+                        <h3 class="text-2xl font-bold text-white mb-2">Elysian Atrium</h3>
+                        <p class="text-xs text-gray-400">Glass structure with dynamic, sound-reactive fluid layouts.</p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="w-[400px] h-[500px] shrink-0 rounded-2xl overflow-hidden border border-white/10 relative group">
+                    <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80" alt="Chronos Monolith" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/40 to-transparent p-8 flex flex-col justify-end">
+                        <span class="text-xs font-semibold text-neon tracking-wider mb-1 uppercase">03 &middot; Chronos Monolith</span>
+                        <h3 class="text-2xl font-bold text-white mb-2">Vortex Observatory</h3>
+                        <p class="text-xs text-gray-400">Steel tower displaying astronomical alignments dynamically.</p>
+                    </div>
+                </div>
+
+                <!-- End block -->
+                <div class="w-[450px] shrink-0 p-8 flex flex-col justify-center">
+                    <h3 class="text-3xl font-extrabold text-white mb-4">Curated Details</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed mb-6">
+                        Each scroll translates smoothly through our catalog. Every card triggers custom hover states that scale and un-blur the viewport natively.
+                    </p>
+                    <a href="vanilla-observer.html" class="inline-flex items-center gap-2 text-neon font-bold hover:underline">
+                        Next: High Performance Vanilla JS &rarr;
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- GSAP CDN Core and ScrollTrigger -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+    <script>
+        // Register ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 1. Inertial Custom Cursor
+        const dot = document.getElementById('cursor-dot');
+        const ring = document.getElementById('cursor-ring');
+
+        let mouse = { x: 0, y: 0 };
+        let dotPos = { x: 0, y: 0 };
+        let ringPos = { x: 0, y: 0 };
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        // Tick loop to simulate physical drag (smooth interpolation)
+        gsap.ticker.add(() => {
+            // Dot follows closely
+            dotPos.x += (mouse.x - dotPos.x) * 0.3;
+            dotPos.y += (mouse.y - dotPos.y) * 0.3;
+            gsap.set(dot, { x: dotPos.x, y: dotPos.y });
+
+            // Ring follows with more delay / weight
+            ringPos.x += (mouse.x - ringPos.x) * 0.12;
+            ringPos.y += (mouse.y - ringPos.y) * 0.12;
+            gsap.set(ring, { x: ringPos.x, y: ringPos.y });
+        });
+
+        // Cursor hovers
+        document.querySelectorAll('.cursor-hover-trigger').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                gsap.to(ring, { width: 60, height: 60, duration: 0.3, ease: 'power2.out', borderColor: '#4F46E5' });
+            });
+            el.addEventListener('mouseleave', () => {
+                gsap.to(ring, { width: 40, height: 40, duration: 0.3, ease: 'power2.out', borderColor: 'rgba(255, 90, 31, 0.4)' });
+            });
+        });
+
+        document.querySelectorAll('.cursor-hover-trigger-invert').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                gsap.to(ring, { width: 50, height: 50, duration: 0.3, ease: 'power2.out', backgroundColor: '#FF5A1F', borderColor: '#FF5A1F', opacity: 0.2 });
+            });
+            el.addEventListener('mouseleave', () => {
+                gsap.to(ring, { width: 40, height: 40, duration: 0.3, ease: 'power2.out', backgroundColor: 'transparent', borderColor: 'rgba(255, 90, 31, 0.4)', opacity: 1 });
+            });
+        });
+
+        // 2. Magnetic Buttons
+        document.querySelectorAll('.magnetic-button').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                // Find relative offset
+                const x = e.clientX - (rect.left + rect.width / 2);
+                const y = e.clientY - (rect.top + rect.height / 2);
+
+                // Displace button slightly towards mouse
+                gsap.to(btn, { x: x * 0.4, y: y * 0.4, duration: 0.3, ease: 'power2.out' });
+                // Enlarge custom ring over element
+                gsap.to(ring, { width: 80, height: 80, duration: 0.3 });
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                // Return button to origin
+                gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.3)' });
+                gsap.to(ring, { width: 40, height: 40, duration: 0.5 });
+            });
+        });
+
+        // 3. GSAP ScrollTrigger - Horizontal Scroll translation
+        const track = document.querySelector('.horizontal-track');
+        
+        gsap.to(track, {
+            x: () => -(track.scrollWidth - window.innerWidth + 48), // translate horizontally
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '.horizontal-scroll-container',
+                pin: true, // pin page vertical scroll
+                scrub: 1.2, // map scroll to position with smooth scrub delay
+                start: 'top 20%',
+                end: () => `+=${track.scrollWidth}`, // scroll distance matches track width
+                invalidateOnRefresh: true, // handle responsive resizes
+            }
+        });
+
+        // Page stagger entries
+        gsap.from('main h1', { opacity: 0, y: 30, duration: 1, ease: 'power3.out' });
+        gsap.from('main p', { opacity: 0, y: 20, duration: 1, delay: 0.2, ease: 'power3.out' });
+        gsap.from('.grid > div', { opacity: 0, y: 30, duration: 0.8, stagger: 0.15, delay: 0.4, ease: 'power2.out' });
+
+    </script>
+</body>
+</html>
