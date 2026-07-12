@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MADINA.KINETICS | Neo-Brutalism Startup</title>
+    <title>MADINA.KINETICS | Neo-Brutalism Automations</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -11,216 +11,296 @@
             theme: {
                 extend: {
                     colors: {
-                        accent: '#A3E635',
-                        highlight: '#FF3366',
+                        lavender: '#F1E9FF', // Pastel lavender background
+                        blackHard: '#1A1A1A',
+                        limeNeo: '#A3E635', // Electric lime
+                        pinkNeo: '#FF3366', // Saturated hot pink
+                        yellowNeo: '#FFDE00', // Saturated canary yellow
+                    },
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'Public Sans', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend+Mega:wght@500;800&family=Public+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;900&display=swap" rel="stylesheet">
     <style>
-        font-family: 'Public Sans', sans-serif;
-        
-            :root {
-                --color-bg: #F1E9FF;
-                --color-accent: #A3E635;
-                --color-highlight: #FF3366;
-                --color-text: #1A1A1A;
-            }
-            body { background: var(--color-bg); color: var(--color-text); }
-            .k-card {
-                border: 4px solid var(--color-text);
-                background: #FFFFFF;
-                border-radius: 20px;
-                box-shadow: 8px 8px 0px var(--color-text);
-                transition: transform 0.15s, box-shadow 0.15s;
-                &:hover {
-                    transform: translate(-4px, -4px);
-                    box-shadow: 12px 12px 0px var(--color-text);
-                    background: var(--color-accent);
-                }
-            }
-        
+        :root {
+            --color-bg: #F1E9FF;
+            --color-accent: #A3E635;
+            --color-highlight: #FF3366;
+            --color-yellow: #FFDE00;
+            --color-text: #1A1A1A;
+        }
 
         @view-transition {
             navigation: auto;
         }
-        .brand-logo-transition {
-            view-transition-name: brand-logo;
-        }
-        .nav-menu-transition {
-            view-transition-name: nav-menu;
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: 'Space Grotesk', sans-serif;
         }
 
-        /* Continuous Scroll line */
-        @keyframes scroll-tracker {
+        /* Continuous High-Impact Scroll Line */
+        @keyframes scroll-glow {
             from { transform: scaleX(0); }
             to { transform: scaleX(1); }
         }
-        .scroll-line {
+        .scroll-tracker-line {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background-color: var(--color-accent);
+            height: 6px;
+            background-color: var(--color-highlight);
+            border-bottom: 2px solid var(--color-text);
             transform-origin: 0% 50%;
             z-index: 100;
-            animation: scroll-tracker auto linear;
+            animation: scroll-glow auto linear;
             animation-timeline: scroll(root);
         }
 
-        /* Custom pointer ring */
+        /* Custom thick-border pointer ring */
         .cursor-ring {
-            width: 44px;
-            height: 44px;
-            border: 2px solid var(--color-accent);
-            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--color-text);
+            background-color: var(--color-accent);
+            border-radius: 12px;
             position: fixed;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) rotate(0deg);
             pointer-events: none;
             z-index: 9998;
+            transition: transform 0.1s linear;
         }
 
-        /* Animated SVG Lines for the Automation flow chart */
-        .animated-svg-path {
-            stroke-dasharray: 100;
-            stroke-dashoffset: 100;
-            transition: stroke-dashoffset 1.5s ease-in-out;
+        /* Heavy Neo-Brutalist shadow translate-effect */
+        .neo-shadow {
+            border: 4px solid var(--color-text);
+            box-shadow: 8px 8px 0px var(--color-text);
+            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             
-            &.active {
-                stroke-dashoffset: 0;
+            &:hover {
+                transform: translate(-4px, -4px);
+                box-shadow: 12px 12px 0px var(--color-text);
+            }
+            
+            &:active {
+                transform: translate(2px, 2px);
+                box-shadow: 4px 4px 0px var(--color-text);
             }
         }
 
-        /* Elegant Chat Widget Popover (Bottom-Right) */
+        /* Spinning sticker badges */
+        @keyframes spin-badge {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .spin-sticker {
+            animation: spin-badge 20s linear infinite;
+            
+            &:hover {
+                animation-play-state: paused;
+                transform: scale(1.1) rotate(5deg) !important;
+            }
+        }
+
+        /* Animated pipeline flow laser pulse */
+        @keyframes laser-flow {
+            0% { left: -100px; }
+            100% { left: calc(100% + 100px); }
+        }
+        .neo-laser-pulse {
+            position: absolute;
+            height: 8px;
+            width: 120px;
+            background-color: var(--color-highlight);
+            border: 2px solid var(--color-text);
+            border-radius: 4px;
+            animation: laser-flow 2.5s linear infinite;
+        }
+
+        /* Neo-Brutalist Chat Widget (Popover API) */
         #chat-widget {
-            border: 2px solid var(--color-accent);
-            background-color: var(--color-bg);
+            border: 4px solid var(--color-text);
+            background-color: #FFFFFF;
             opacity: 0;
-            transform: translateY(20px) scale(0.95);
-            transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), display 0.35s cubic-bezier(0.16, 1, 0.3, 1) allow-discrete;
+            transform: translateY(20px) rotate(-1deg) scale(0.95);
+            transition: opacity 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), display 0.3s allow-discrete;
+            box-shadow: 12px 12px 0px var(--color-text);
             
             &:popover-open {
                 opacity: 1;
-                transform: translateY(0) scale(1);
+                transform: translateY(0) rotate(0deg) scale(1);
                 
                 @starting-style {
                     opacity: 0;
-                    transform: translateY(20px) scale(0.95);
+                    transform: translateY(20px) rotate(-1deg) scale(0.95);
                 }
             }
         }
+
+        /* Seamless marquee footer */
+        @keyframes marquee-glide {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee-track {
+            animation: marquee-glide 15s linear infinite;
+        }
     </style>
-    <!-- Load shared multi-sensory global clicks -->
+    <!-- Multi-sensory tactile feedback helper -->
     <script src="tactile-feedback.js" defer></script>
 </head>
 <body class="min-h-screen relative overflow-x-hidden p-0 m-0">
 
-    <!-- Pointer Ring -->
+    <!-- Heavy Vector pointer ring -->
     <div class="cursor-ring hidden md:block" id="cursor-ring"></div>
 
     <!-- Scroll Line -->
-    <div class="scroll-line"></div>
+    <div class="scroll-tracker-line"></div>
 
-    <!-- Navigation Header -->
-    <header class="fixed top-0 left-0 w-full z-40 bg-opacity-90 backdrop-blur-md px-6 lg:px-12 py-4">
-        <div class="max-w-7xl mx-auto flex justify-between items-center rounded-2xl border-4 border-black bg-white p-4">
-            <a href="madina.html" class="text-xl font-bold tracking-widest flex items-center gap-2 group brand-logo-transition">
-                <span class="w-2.5 h-2.5 bg-accent rounded-full group-hover:scale-150 transition-transform"></span>
+    <!-- Main Navigation Header -->
+    <header class="fixed top-0 left-0 w-full z-40 px-6 lg:px-12 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center rounded-2xl border-4 border-blackHard bg-white p-4 shadow-[6px_6px_0px_#1A1A1A]">
+            <a href="madina.html" class="text-xl font-black tracking-widest flex items-center gap-2 group brand-logo-transition text-blackHard">
+                <span class="w-4 h-4 bg-pinkNeo rounded-full group-hover:scale-125 transition-transform border-2 border-blackHard"></span>
                 MADINA.KINETICS
             </a>
             
-            <nav class="hidden md:flex items-center space-x-8 text-[10px] tracking-widest uppercase font-bold nav-menu-transition">
-                <a href="madina.html" class="hover:underline">01. Hub principal</a>
-                <a href="#solutions" class="hover:underline">02. Solutions</a>
-                <a href="#designer-pipeline" class="hover:underline">03. Flux Visuel</a>
-                <a href="#briefing" class="hover:underline">04. Briefing</a>
+            <nav class="hidden md:flex items-center space-x-8 text-[11px] tracking-widest uppercase font-black text-blackHard nav-menu-transition">
+                <a href="madina.html" class="hover:text-pinkNeo transition-colors">&lt; Hub Principal &gt;</a>
+                <a href="#solutions" class="hover:text-pinkNeo transition-colors">Solutions</a>
+                <a href="#designer-pipeline" class="hover:text-pinkNeo transition-colors">Démo Pipeline</a>
+                <a href="#briefing" class="hover:text-pinkNeo transition-colors">Briefing</a>
             </nav>
 
-            <button popovertarget="chat-widget" class="px-5 py-2 border border-accent rounded-full hover:bg-accent hover:text-obsidian text-xs font-bold uppercase tracking-wider transition-all">
-                Madina Bot &raquo;
+            <button popovertarget="chat-widget" class="px-5 py-2.5 bg-yellowNeo hover:bg-yellowNeo/90 border-3 border-blackHard rounded-xl font-black text-xs uppercase tracking-wider text-blackHard shadow-[4px_4px_0px_#1A1A1A] hover:translate-y-[-2px] active:translate-y-[2px] transition-all">
+                Madina Bot 🤖
             </button>
         </div>
     </header>
 
     <!-- Main Hero -->
-    <main class="pt-40 max-w-7xl mx-auto px-6 lg:px-12">
+    <main class="pt-48 max-w-7xl mx-auto px-6 lg:px-12">
         
-        <!-- Luxury Hero Block -->
-        <section class="mb-32 relative">
-            <div class="max-w-4xl">
-                <span class="text-xs font-bold tracking-widest uppercase mb-3 block text-accent">// MADINA.KINETICS | Neo-Brutalism Startup</span>
-                <h1 class="text-4xl lg:text-7xl font-bold tracking-tight leading-none mb-8">
-                    Automation & Design d'Exception en Martinique.
+        <!-- Big Bold Hero Section -->
+        <section class="mb-32 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div class="lg:col-span-7 text-left">
+                <span class="text-xs font-black tracking-widest uppercase text-pinkNeo bg-white border-2 border-blackHard px-3 py-1 rounded shadow-[3px_3px_0px_#1A1A1A] inline-block mb-4">
+                    // MARTINIQUE AUTOMATION HUB
+                </span>
+                <h1 class="text-4xl lg:text-7xl font-black tracking-tight leading-none text-blackHard mb-8">
+                    ZÉRO EFFORT.<br>
+                    <span class="bg-limeNeo border-4 border-blackHard px-3 py-1 inline-block rotate-[-1.5deg] shadow-[6px_6px_0px_#1A1A1A]">100% AUTOMATISÉ.</span>
                 </h1>
-                <p class="text-base lg:text-lg opacity-80 max-w-xl leading-relaxed mb-8">
-                    Inspiré par le mouvement néo-brutaliste du web moderne (Gumroad, Figma). Formes asymétriques ludiques, ombres dures sans flou, palettes saturées et bordures d'impact. Nous automatisons vos workflows, concevons des bots d'IA conversationnels intelligents et créons des vitrines web de prestige.
+                <p class="text-base lg:text-lg opacity-90 max-w-xl leading-relaxed mb-8 font-semibold text-blackHard">
+                    Nous supprimons vos saisies manuelles fastidieuses. De Fort-de-France à l'international, notre agence conçoit vos architectures de bots d'IA sur-mesure et vos interfaces web de haut vol.
                 </p>
                 <div class="flex flex-wrap gap-4">
-                    <button popovertarget="chat-widget" class="px-6 py-3.5 bg-accent text-white hover:bg-transparent border border-accent font-bold text-xs uppercase tracking-widest rounded-xl transition-all">
+                    <button popovertarget="chat-widget" class="px-6 py-4 bg-pinkNeo text-white hover:text-blackHard border-3 border-blackHard font-black text-xs uppercase tracking-widest rounded-xl shadow-[6px_6px_0px_#1A1A1A] hover:translate-y-[-2px] active:translate-y-[2px] transition-all">
                         Ouvrir l'Assistant IA
                     </button>
-                    <a href="#designer-pipeline" class="px-6 py-3.5 border border-accent text-accent font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-accent/5 transition-colors">
-                        Simuler un Flux &rarr;
+                    <a href="#designer-pipeline" class="px-6 py-4 bg-white border-3 border-blackHard text-blackHard font-black text-xs uppercase tracking-widest rounded-xl shadow-[6px_6px_0px_#1A1A1A] hover:translate-y-[-2px] active:translate-y-[2px] transition-all flex items-center gap-2">
+                        Simuler un Workflow &raquo;
                     </a>
+                </div>
+            </div>
+
+            <!-- Spinning Retro Badge Illustration -->
+            <div class="lg:col-span-5 relative flex justify-center items-center h-[320px]">
+                <div class="absolute w-64 h-64 bg-yellowNeo border-4 border-blackHard rounded-3xl rotate-6 shadow-[10px_10px_0px_#1A1A1A]"></div>
+                <!-- Spinning badge -->
+                <div class="spin-sticker absolute w-48 h-48 bg-pinkNeo border-4 border-blackHard rounded-full flex flex-col items-center justify-center text-center p-4 text-white font-black text-sm uppercase tracking-widest shadow-[6px_6px_0px_#1A1A1A]">
+                    <span>Madinina</span>
+                    <span class="text-xs text-yellowNeo mt-1">Kinetics 🌴</span>
+                    <span class="text-[9px] text-white opacity-80 mt-2">&middot; 14&deg;N &middot;</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Brand Partners Sliding Marquee -->
+        <section class="overflow-hidden border-y-4 border-blackHard bg-white py-6 mb-32 -mx-6 lg:-mx-12">
+            <div class="flex overflow-hidden select-none whitespace-nowrap">
+                <div class="marquee-track flex gap-12 text-3xl font-black text-blackHard uppercase tracking-widest">
+                    <span>ZAPIER</span>
+                    <span>&middot;</span>
+                    <span>MAKE</span>
+                    <span>&middot;</span>
+                    <span>AIRTABLE</span>
+                    <span>&middot;</span>
+                    <span>WHATSAPP API</span>
+                    <span>&middot;</span>
+                    <span>OPENAI</span>
+                    <span>&middot;</span>
+                    <span>ZAPIER</span>
+                    <span>&middot;</span>
+                    <span>MAKE</span>
+                    <span>&middot;</span>
+                    <span>AIRTABLE</span>
+                    <span>&middot;</span>
+                    <span>WHATSAPP API</span>
+                    <span>&middot;</span>
+                    <span>OPENAI</span>
                 </div>
             </div>
         </section>
 
         <!-- Dynamic Solutions Section -->
-        <section id="solutions" class="mb-32 border-t border-accent/20 pt-16">
+        <section id="solutions" class="mb-32">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
                 <div class="lg:col-span-4">
-                    <span class="text-xs font-bold tracking-widest text-accent uppercase mb-2 block">// SOLUTIONS</span>
-                    <h2 class="text-3xl lg:text-5xl font-bold text-white uppercase">Nos Disciplines</h2>
-                    <p class="text-sm opacity-70 leading-relaxed mt-4">
-                        Des architectures sur-mesure combinant l'efficacité technique à l'élégance de la direction artistique.
+                    <span class="text-xs font-black tracking-widest text-pinkNeo uppercase mb-2 block">// SOLUTIONS</span>
+                    <h2 class="text-3xl lg:text-5xl font-black text-blackHard uppercase leading-none mb-6">Nos Disciplines Techniques</h2>
+                    <p class="text-sm opacity-80 leading-relaxed font-semibold text-blackHard">
+                        Pas de blabla commercial. Que du code robuste, des connexions de données solides et des automatisations réelles.
                     </p>
                 </div>
                 
                 <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- Solution A -->
-                    <div class="k-card p-8 rounded-3xl flex flex-col justify-between h-[240px]">
-                        <span class="text-[10px] font-bold text-accent uppercase tracking-widest">01 &bull; WEB DESIGN</span>
+                    <div class="neo-shadow p-8 rounded-3xl bg-white h-[260px] flex flex-col justify-between">
+                        <span class="text-[10px] font-black text-pinkNeo uppercase tracking-widest">01 &bull; WEB DESIGN</span>
                         <div>
-                            <h3 class="text-xl font-bold mb-2">Interfaces d'Exception</h3>
-                            <p class="text-xs opacity-80 leading-relaxed">
-                                Conception de vitrines interactives au style minimaliste d'élite.
+                            <h3 class="text-2xl font-black text-blackHard mb-2">Interfaces de Vol</h3>
+                            <p class="text-xs opacity-90 leading-relaxed font-semibold">
+                                Conception de vitrines interactives au style néo-brutaliste percutant, adaptées pour captiver l'attention de vos prospects.
                             </p>
                         </div>
                     </div>
 
                     <!-- Solution B -->
-                    <div class="k-card p-8 rounded-3xl flex flex-col justify-between h-[240px]">
-                        <span class="text-[10px] font-bold text-accent uppercase tracking-widest">02 &bull; BOT CREATION</span>
+                    <div class="neo-shadow p-8 rounded-3xl bg-white h-[260px] flex flex-col justify-between">
+                        <span class="text-[10px] font-black text-pinkNeo uppercase tracking-widest">02 &bull; BOT CREATION</span>
                         <div>
-                            <h3 class="text-xl font-bold mb-2">Agents Conversationnels</h3>
-                            <p class="text-xs opacity-80 leading-relaxed">
-                                Intégration de bots d'IA sur WhatsApp qualifiant vos prospects en direct.
+                            <h3 class="text-2xl font-black text-blackHard mb-2">Création de Bots d'IA</h3>
+                            <p class="text-xs opacity-90 leading-relaxed font-semibold">
+                                Intégration de bots d'IA sur WhatsApp qualifiant et capturant vos leads en direct 24h/7j, configurés aux Antilles.
                             </p>
                         </div>
                     </div>
 
                     <!-- Solution C -->
-                    <div class="k-card p-8 rounded-3xl flex flex-col justify-between h-[240px]">
-                        <span class="text-[10px] font-bold text-accent uppercase tracking-widest">03 &bull; WORKFLOW AUTOMATIONS</span>
+                    <div class="neo-shadow p-8 rounded-3xl bg-white h-[260px] flex flex-col justify-between">
+                        <span class="text-[10px] font-black text-pinkNeo uppercase tracking-widest">03 &bull; WORKFLOW AUTOMATIONS</span>
                         <div>
-                            <h3 class="text-xl font-bold mb-2">Automations de Workflows</h3>
-                            <p class="text-xs opacity-80 leading-relaxed">
-                                Interconnexion de vos applications (Make, Zapier, CRM) pour automatiser vos tâches.
+                            <h3 class="text-2xl font-black text-blackHard mb-2">Automations de Workflows</h3>
+                            <p class="text-xs opacity-90 leading-relaxed font-semibold">
+                                Interconnexion de vos applications (Make, Zapier, Airtable, CRM) pour faire transiter vos données automatiquement.
                             </p>
                         </div>
                     </div>
 
                     <!-- Solution D -->
-                    <div class="k-card p-8 rounded-3xl flex flex-col justify-between h-[240px]">
-                        <span class="text-[10px] font-bold text-accent uppercase tracking-widest">04 &bull; IA DATA INTEGRATION</span>
+                    <div class="neo-shadow p-8 rounded-3xl bg-white h-[260px] flex flex-col justify-between">
+                        <span class="text-[10px] font-black text-pinkNeo uppercase tracking-widest">04 &bull; INTEGRATIONS IA</span>
                         <div>
-                            <h3 class="text-xl font-bold mb-2">Analyse & Pipelines IA</h3>
-                            <p class="text-xs opacity-80 leading-relaxed">
-                                Traitement sémantique de vos données par IA génératives locales.
+                            <h3 class="text-2xl font-black text-blackHard mb-2">Traitement Sémantique</h3>
+                            <p class="text-xs opacity-90 leading-relaxed font-semibold">
+                                Analyse automatique de vos emails entrants et documents d'affaires par IA locales pour libérer vos agents administratifs.
                             </p>
                         </div>
                     </div>
@@ -229,92 +309,92 @@
         </section>
 
         <!-- Designer Interactive Pipeline (SVG Morph-lines) -->
-        <section id="designer-pipeline" class="mb-32 border-t border-accent/20 pt-16">
-            <span class="text-xs font-bold text-accent uppercase mb-2 block">// 02 &bull; FLUX VISUEL</span>
-            <h2 class="text-3xl lg:text-5xl font-bold uppercase mb-8">Cartographie d'un Écosystème Connecté</h2>
+        <section id="designer-pipeline" class="mb-32 border-t-4 border-blackHard pt-16">
+            <span class="text-xs font-black text-pinkNeo uppercase mb-2 block">// 02 &bull; FLUX VISUEL INTERACTIF</span>
+            <h2 class="text-3xl lg:text-5xl font-black uppercase text-blackHard mb-8">Cartographie de l'Automation</h2>
             
-            <div class="p-8 border border-accent/20 bg-opacity-20 rounded-3xl relative overflow-hidden min-h-[400px] flex flex-col justify-between shadow-sm">
+            <div class="p-8 border-4 border-blackHard bg-white rounded-3xl relative overflow-hidden min-h-[420px] flex flex-col justify-between shadow-[8px_8px_0px_#1A1A1A]">
                 
-                <div class="z-10 flex justify-between items-center text-xs text-accent/70 font-semibold">
-                    <span>INTERFACE DE VISUALISATION D'AUTOMATION</span>
-                    <span id="pipeline-status">En attente de couplage...</span>
+                <div class="z-10 flex justify-between items-center text-xs font-black text-blackHard">
+                    <span>VISUALISATION TECHNIQUE DES FLUX</span>
+                    <span id="pipeline-status" class="bg-yellowNeo border-2 border-blackHard px-2 py-0.5 rounded shadow-[2px_2px_0px_#1A1A1A]">En attente d'impulsion...</span>
                 </div>
 
                 <!-- Abstract Interactive SVG Graph mapping -->
                 <div class="z-10 grid grid-cols-1 md:grid-cols-4 gap-8 relative items-center my-8">
                     <!-- SVG lines representing connectors -->
                     <svg class="absolute inset-0 w-full h-full hidden md:block z-0 overflow-visible pointer-events-none">
-                        <line x1="12%" y1="50%" x2="38%" y2="50%" stroke="rgba(255, 255, 255, 0.15)" stroke-width="2" />
-                        <line x1="38%" y1="50%" x2="62%" y2="50%" stroke="rgba(255, 255, 255, 0.15)" stroke-width="2" />
-                        <line x1="62%" y1="50%" x2="88%" y2="50%" stroke="rgba(255, 255, 255, 0.15)" stroke-width="2" />
+                        <line x1="12%" y1="50%" x2="38%" y2="50%" stroke="#1A1A1A" stroke-width="4" />
+                        <line x1="38%" y1="50%" x2="62%" y2="50%" stroke="#1A1A1A" stroke-width="4" />
+                        <line x1="62%" y1="50%" x2="88%" y2="50%" stroke="#1A1A1A" stroke-width="4" />
                         
                         <!-- Glowing animated stroke paths on active -->
-                        <path id="svg-p1" class="animated-svg-path" d="M 120,50 L 320,50" stroke="#A3E635" stroke-width="2.5" fill="none" />
-                        <path id="svg-p2" class="animated-svg-path" d="M 320,50 L 520,50" stroke="#A3E635" stroke-width="2.5" fill="none" />
-                        <path id="svg-p3" class="animated-svg-path" d="M 520,50 L 720,50" stroke="#A3E635" stroke-width="2.5" fill="none" />
+                        <path id="svg-p1" class="animated-svg-path" d="M 120,50 L 320,50" stroke="#FF3366" stroke-width="5" fill="none" />
+                        <path id="svg-p2" class="animated-svg-path" d="M 320,50 L 520,50" stroke="#FF3366" stroke-width="5" fill="none" />
+                        <path id="svg-p3" class="animated-svg-path" d="M 520,50 L 720,50" stroke="#FF3366" stroke-width="5" fill="none" />
                     </svg>
 
                     <!-- Node 1 -->
-                    <div class="node-item p-6 rounded-2xl border border-accent/20 bg-black/60 text-center relative z-10 transition-all duration-300" id="nd-1">
-                        <span class="text-[9px] text-accent/80 font-bold block uppercase tracking-wider">01 / TRIGGER</span>
-                        <h4 class="text-sm font-bold mt-1">Saisie Formulaire</h4>
+                    <div class="node-item p-6 rounded-2xl border-4 border-blackHard bg-lavender text-center relative z-10 transition-all duration-300 shadow-[4px_4px_0px_#1A1A1A]" id="nd-1">
+                        <span class="text-[9px] text-pinkNeo font-black block uppercase tracking-wider">01 / TRIGGER</span>
+                        <h4 class="text-sm font-black text-blackHard mt-1">Saisie Formulaire</h4>
                     </div>
 
                     <!-- Node 2 -->
-                    <div class="node-item p-6 rounded-2xl border border-accent/20 bg-black/60 text-center opacity-40 relative z-10 transition-all duration-300" id="nd-2">
-                        <span class="text-[9px] text-accent/80 font-bold block uppercase tracking-wider">02 / AI CLASSIFIER</span>
-                        <h4 class="text-sm font-bold mt-1">Analyse Madina Bot</h4>
+                    <div class="node-item p-6 rounded-2xl border-4 border-blackHard bg-white text-center opacity-40 relative z-10 transition-all duration-300 shadow-[4px_4px_0px_#1A1A1A]" id="nd-2">
+                        <span class="text-[9px] text-pinkNeo font-black block uppercase tracking-wider">02 / AI CLASSIFIER</span>
+                        <h4 class="text-sm font-black text-blackHard mt-1">Analyse Madina Bot</h4>
                     </div>
 
                     <!-- Node 3 -->
-                    <div class="node-item p-6 rounded-2xl border border-accent/20 bg-black/60 text-center opacity-40 relative z-10 transition-all duration-300" id="nd-3">
-                        <span class="text-[9px] text-accent/80 font-bold block uppercase tracking-wider">03 / CRM SYNC</span>
-                        <h4 class="text-sm font-bold mt-1">Mise à jour Fiche</h4>
+                    <div class="node-item p-6 rounded-2xl border-4 border-blackHard bg-white text-center opacity-40 relative z-10 transition-all duration-300 shadow-[4px_4px_0px_#1A1A1A]" id="nd-3">
+                        <span class="text-[9px] text-pinkNeo font-black block uppercase tracking-wider">03 / CRM SYNC</span>
+                        <h4 class="text-sm font-black text-blackHard mt-1">Mise à jour Fiche</h4>
                     </div>
 
                     <!-- Node 4 -->
-                    <div class="node-item p-6 rounded-2xl border border-accent/20 bg-black/60 text-center opacity-40 relative z-10 transition-all duration-300" id="nd-4">
-                        <span class="text-[9px] text-accent/80 font-bold block uppercase tracking-wider">04 / REACTION</span>
-                        <h4 class="text-sm font-bold mt-1">Alerte SMS & Email</h4>
+                    <div class="node-item p-6 rounded-2xl border-4 border-blackHard bg-white text-center opacity-40 relative z-10 transition-all duration-300 shadow-[4px_4px_0px_#1A1A1A]" id="nd-4">
+                        <span class="text-[9px] text-pinkNeo font-black block uppercase tracking-wider">04 / REACTION</span>
+                        <h4 class="text-sm font-black text-blackHard mt-1">Alerte SMS & Email</h4>
                     </div>
                 </div>
 
                 <div class="z-10 flex justify-between items-center">
-                    <button onclick="triggerFlow()" class="px-6 py-3 bg-accent text-black font-bold text-xs uppercase tracking-widest rounded-xl transition-all shadow-md">
-                        Lancer le Flux Tactile &raquo;
+                    <button onclick="triggerFlow()" class="px-6 py-4 bg-yellowNeo hover:bg-yellowNeo/90 border-3 border-blackHard text-blackHard font-black text-xs uppercase tracking-widest rounded-xl shadow-[4px_4px_0px_#1A1A1A] hover:translate-y-[-2px] active:translate-y-[2px] transition-all">
+                        Lancer le Flux de Données &raquo;
                     </button>
-                    <span class="text-[9px] uppercase tracking-wider text-accent font-bold">SYSTÈME ORGANIQUE</span>
+                    <span class="text-[10px] uppercase tracking-wider text-blackHard font-black">SYSTÈME ORGANIQUE TACTILE</span>
                 </div>
             </div>
         </section>
 
         <!-- Briefing Form -->
-        <section id="briefing" class="mb-32 border-t border-accent/20 pt-16">
+        <section id="briefing" class="mb-32 border-t-4 border-blackHard pt-16">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
                 <div class="lg:col-span-4">
-                    <span class="text-xs font-bold text-accent uppercase mb-2 block">// COUPLAGE TECHNIQUE</span>
-                    <h2 class="text-3xl font-bold uppercase mb-6">Prêt à Collaborer ?</h2>
-                    <p class="text-xs opacity-75 leading-relaxed">
-                        Soumettez vos besoins en automatisation. Nos ingénieurs basés en Martinique conçoivent votre solution sur-mesure.
+                    <span class="text-xs font-black text-pinkNeo uppercase mb-2 block">// BRIEFING TECHNIQUE DIRECT</span>
+                    <h2 class="text-3xl font-black uppercase text-blackHard mb-6">Prêt à collaborer ?</h2>
+                    <p class="text-sm opacity-85 leading-relaxed font-semibold text-blackHard">
+                        Soumettez votre projet d'automation. Nos ingénieurs basés en Martinique conçoivent votre solution technique sous 12h.
                     </p>
                 </div>
                 
                 <div class="lg:col-span-8">
-                    <form action="#" class="border border-accent/20 p-8 rounded-3xl bg-black/20 flex flex-col gap-6" id="brief-form">
+                    <form action="#" class="border-4 border-blackHard p-8 rounded-3xl bg-white flex flex-col gap-6 shadow-[8px_8px_0px_#1A1A1A]" id="brief-form">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="text-[10px] text-accent uppercase tracking-wider block mb-2 font-bold">Votre Prénom</label>
-                                <input type="text" placeholder="Alexandre" required class="w-full bg-transparent border-b border-accent/30 focus:border-accent py-2 text-sm focus:outline-none transition-colors">
+                                <label class="text-[11px] text-blackHard uppercase tracking-wider block mb-2 font-black">Votre Prénom</label>
+                                <input type="text" placeholder="Alexandre" required class="w-full bg-transparent border-b-3 border-blackHard focus:border-pinkNeo py-2 text-sm focus:outline-none transition-colors font-semibold text-blackHard">
                             </div>
                             <div>
-                                <label class="text-[10px] text-accent uppercase tracking-wider block mb-2 font-bold">Adresse Mail</label>
-                                <input type="email" placeholder="alex@domaine.com" required class="w-full bg-transparent border-b border-accent/30 focus:border-accent py-2 text-sm focus:outline-none transition-colors">
+                                <label class="text-[11px] text-blackHard uppercase tracking-wider block mb-2 font-black">Adresse Mail</label>
+                                <input type="email" placeholder="alex@domaine.com" required class="w-full bg-transparent border-b-3 border-blackHard focus:border-pinkNeo py-2 text-sm focus:outline-none transition-colors font-semibold text-blackHard">
                             </div>
                         </div>
 
                         <div>
-                            <label class="text-[10px] text-accent uppercase tracking-wider block mb-2 font-bold">Votre Projet Principal</label>
-                            <select class="w-full bg-transparent border-b border-accent/30 focus:border-accent py-2 text-sm focus:outline-none transition-colors text-accent font-bold">
+                            <label class="text-[11px] text-blackHard uppercase tracking-wider block mb-2 font-black">Votre Projet Principal</label>
+                            <select class="w-full bg-transparent border-b-3 border-blackHard focus:border-pinkNeo py-2 text-sm focus:outline-none transition-colors text-blackHard font-black">
                                 <option value="automation">Automatisation & Intégration CRM (Make/Zapier)</option>
                                 <option value="bot">Création de Bot conversationnel IA & WhatsApp</option>
                                 <option value="design">Conception Web Design d'Exception</option>
@@ -322,12 +402,12 @@
                         </div>
 
                         <div>
-                            <label class="text-[10px] text-accent uppercase tracking-wider block mb-2 font-bold">Description de l'architecture souhaitée</label>
-                            <textarea rows="4" placeholder="Ex: Envoyer des notifications de commande..." required class="w-full bg-transparent border border-accent/20 rounded-2xl p-4 text-sm focus:outline-none focus:border-accent transition-colors"></textarea>
+                            <label class="text-[11px] text-blackHard uppercase tracking-wider block mb-2 font-black">Description de l'architecture souhaitée</label>
+                            <textarea rows="4" placeholder="Ex: Envoyer des notifications de commande..." required class="w-full bg-transparent border-3 border-blackHard rounded-2xl p-4 text-sm focus:outline-none focus:border-pinkNeo transition-colors font-semibold text-blackHard"></textarea>
                         </div>
 
-                        <button type="submit" class="w-full py-4 bg-accent text-black font-bold text-xs uppercase tracking-widest rounded-2xl transition-all">
-                            Initier le Briefing Technique
+                        <button type="submit" class="w-full py-4 bg-limeNeo text-blackHard border-3 border-blackHard font-black text-xs uppercase tracking-widest rounded-2xl shadow-[4px_4px_0px_#1A1A1A] hover:translate-y-[-2px] active:translate-y-[2px] transition-all">
+                            Transmettre le Briefing Technique
                         </button>
                     </form>
                 </div>
@@ -339,28 +419,28 @@
     <!-- FLOATING CHATBOT WIDGET (Bottom Right) -->
     <div class="fixed bottom-6 right-6 z-50">
         <!-- Floating circular trigger button -->
-        <button popovertarget="chat-widget" class="w-14 h-14 rounded-full bg-accent text-black flex items-center justify-center shadow-2xl focus:outline-none select-none hover:scale-105 transition-transform active:scale-95">
+        <button popovertarget="chat-widget" class="w-14 h-14 rounded-full bg-pinkNeo text-white flex items-center justify-center shadow-2xl focus:outline-none select-none hover:scale-105 transition-transform active:scale-95 border-3 border-blackHard">
             <svg class="h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
         </button>
 
         <!-- Popover chat window -->
-        <div id="chat-widget" popover class="fixed bottom-24 right-6 h-[480px] w-[340px] md:w-[380px] rounded-3xl p-6 flex flex-col justify-between shadow-2xl select-none">
-            <div class="flex justify-between items-center border-b border-accent/15 pb-3">
+        <div id="chat-widget" popover class="fixed bottom-24 right-6 h-[480px] w-[340px] md:w-[380px] rounded-3xl p-6 flex flex-col justify-between select-none">
+            <div class="flex justify-between items-center border-b-3 border-blackHard pb-3">
                 <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 bg-accent rounded-full animate-ping"></span>
+                    <span class="w-2.5 h-2.5 bg-limeNeo rounded-full animate-ping border border-blackHard"></span>
                     <div class="text-left">
-                        <span class="text-xs font-bold text-white block leading-none">Madina Bot 🤖</span>
-                        <span class="text-[9px] opacity-60">Creole Assistant Suite &middot; Online</span>
+                        <span class="text-xs font-black text-blackHard block leading-none">Madina Bot 🤖</span>
+                        <span class="text-[9px] opacity-60 font-bold">Creole Assistant &middot; Online</span>
                     </div>
                 </div>
-                <button popovertarget="chat-widget" popovertargetaction="hide" class="text-[10px] opacity-60 hover:opacity-100">[ Fermer ]</button>
+                <button popovertarget="chat-widget" popovertargetaction="hide" class="text-[10px] font-black uppercase text-pinkNeo">[ Fermer ]</button>
             </div>
 
             <!-- Chat bubbles -->
             <div class="flex-1 my-4 overflow-y-auto space-y-3 text-xs pr-1 scrollbar-none" id="chat-history">
-                <div class="text-left bg-accent/5 p-3 rounded-2xl rounded-tl-none border border-accent/10 leading-relaxed max-w-[85%]">
+                <div class="text-left bg-lavender p-3 rounded-2xl rounded-tl-none border-2 border-blackHard font-bold leading-relaxed max-w-[85%] text-blackHard shadow-[3px_3px_0px_#1A1A1A]">
                     Sa ka fèt ! 👋 Bienvenue chez <strong>MADINA.KINETICS</strong>. 
                     Je suis votre assistant d'automatisation. Comment puis-je propulser votre entreprise ?
                 </div>
@@ -368,27 +448,27 @@
 
             <!-- Pre-configured quick-reply chips -->
             <div class="flex flex-wrap gap-2 mb-3" id="quick-replies">
-                <button onclick="sendReply('Créer un Bot')" class="px-3 py-1 border border-accent/20 bg-accent/5 hover:bg-accent/10 rounded-full text-[9px] uppercase tracking-wider text-accent transition-colors">Créer un Bot IA</button>
-                <button onclick="sendReply('Intégrer mon CRM')" class="px-3 py-1 border border-accent/20 bg-accent/5 hover:bg-accent/10 rounded-full text-[9px] uppercase tracking-wider text-accent transition-colors">Automatiser mon CRM</button>
-                <button onclick="sendReply('Devis site web')" class="px-3 py-1 border border-accent/20 bg-accent/5 hover:bg-accent/10 rounded-full text-[9px] uppercase tracking-wider text-accent transition-colors">Tarif Projet</button>
+                <button onclick="sendReply('Créer un Bot')" class="px-3 py-1 bg-yellowNeo border-2 border-blackHard rounded-full text-[9px] font-black uppercase tracking-wider text-blackHard transition-all hover:scale-105 active:scale-95 shadow-[2px_2px_0px_#1A1A1A]">Créer un Bot IA</button>
+                <button onclick="sendReply('Intégrer mon CRM')" class="px-3 py-1 bg-limeNeo border-2 border-blackHard rounded-full text-[9px] font-black uppercase tracking-wider text-blackHard transition-all hover:scale-105 active:scale-95 shadow-[2px_2px_0px_#1A1A1A]">Automatiser mon CRM</button>
+                <button onclick="sendReply('Devis site web')" class="px-3 py-1 bg-white border-2 border-blackHard rounded-full text-[9px] font-black uppercase tracking-wider text-blackHard transition-all hover:scale-105 active:scale-95 shadow-[2px_2px_0px_#1A1A1A]">Tarif Projet</button>
             </div>
 
             <!-- Chat input form -->
             <form action="#" class="flex gap-2" id="chat-form">
-                <input type="text" id="chat-input" placeholder="Écrivez votre message..." class="flex-1 bg-transparent border border-accent/20 focus:border-accent text-xs rounded-xl px-4 py-2.5 focus:outline-none transition-colors text-white">
-                <button type="submit" class="px-4 bg-accent text-black font-bold text-xs uppercase rounded-xl tracking-wider hover:bg-accent/90 transition-all">Go</button>
+                <input type="text" id="chat-input" placeholder="Écrivez votre message..." class="flex-1 bg-transparent border-2 border-blackHard text-xs rounded-xl px-4 py-2.5 focus:outline-none transition-colors text-blackHard font-bold focus:border-pinkNeo">
+                <button type="submit" class="px-4 bg-pinkNeo text-white border-2 border-blackHard font-black text-xs uppercase rounded-xl tracking-wider hover:bg-pinkNeo/90 transition-all">Go</button>
             </form>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="border-t border-accent/15 py-12">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row justify-between items-center gap-6 text-xs opacity-60">
+    <footer class="border-t-4 border-blackHard py-12 bg-white text-blackHard">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row justify-between items-center gap-6 text-xs font-bold">
             <div>
                 &copy; 2026 MADINA.KINETICS. Fort-de-France, Martinique &middot; Tous droits réservés.
             </div>
-            <div class="flex gap-6 font-bold">
-                <a href="index.html" class="text-accent hover:underline">&larr; Retour au hub</a>
+            <div class="flex gap-6 font-black">
+                <a href="index.html" class="text-pinkNeo hover:underline">&larr; Retour au hub</a>
             </div>
         </div>
     </footer>
@@ -415,10 +495,10 @@
         // Pointer expand
         document.querySelectorAll('button, a, summary, select').forEach(el => {
             el.addEventListener('mouseenter', () => {
-                gsap.to(ring, { width: 56, height: 56, duration: 0.3, ease: 'power2.out' });
+                gsap.to(ring, { width: 56, height: 56, duration: 0.3, ease: 'power2.out', backgroundColor: '#FF3366', rotate: 45 });
             });
             el.addEventListener('mouseleave', () => {
-                gsap.to(ring, { width: 44, height: 44, duration: 0.3, ease: 'power2.out' });
+                gsap.to(ring, { width: 44, height: 44, duration: 0.3, ease: 'power2.out', backgroundColor: '#A3E635', rotate: 0 });
             });
         });
 
@@ -436,11 +516,10 @@
             const p3 = document.getElementById('svg-p3');
 
             status.innerText = "Traitement en cours...";
-            status.classList.add('text-accent');
 
             // Draw line 1 & activate node 1
             setTimeout(() => {
-                n1.classList.add('bg-accent', 'text-black');
+                n1.classList.add('bg-pinkNeo', 'text-white');
                 p1.classList.add('active');
                 status.innerText = "Nœud 1 validé. Tracé de l'IA...";
             }, 0);
@@ -448,7 +527,7 @@
             // Draw line 2 & activate node 2
             setTimeout(() => {
                 n2.classList.remove('opacity-40');
-                n2.classList.add('bg-accent', 'text-black');
+                n2.classList.add('bg-pinkNeo', 'text-white');
                 p2.classList.add('active');
                 status.innerText = "Classification sémantique complétée...";
             }, 1000);
@@ -456,7 +535,7 @@
             // Draw line 3 & activate node 3
             setTimeout(() => {
                 n3.classList.remove('opacity-40');
-                n3.classList.add('bg-accent', 'text-black');
+                n3.classList.add('bg-pinkNeo', 'text-white');
                 p3.classList.add('active');
                 status.innerText = "Données synchronisées dans le CRM...";
             }, 2000);
@@ -464,14 +543,14 @@
             // Activate node 4
             setTimeout(() => {
                 n4.classList.remove('opacity-40');
-                n4.classList.add('bg-accent', 'text-black');
+                n4.classList.add('bg-pinkNeo', 'text-white');
                 status.innerText = "Flux complété : Notifications transmises ! ✓";
             }, 3000);
 
             // Reset back
             setTimeout(() => {
                 [n1, n2, n3, n4].forEach(n => {
-                    n.classList.remove('bg-accent', 'text-black');
+                    n.classList.remove('bg-pinkNeo', 'text-white');
                 });
                 [n2, n3, n4].forEach(n => {
                     n.classList.add('opacity-40');
@@ -480,7 +559,6 @@
                     p.classList.remove('active');
                 });
                 status.innerText = "Écosystème au repos.";
-                status.classList.remove('text-accent');
             }, 6000);
         }
 
@@ -499,8 +577,8 @@
         function addMsg(text, isUser = false) {
             const bubble = document.createElement('div');
             bubble.className = isUser 
-                ? "text-right bg-accent text-black p-3 rounded-2xl rounded-tr-none ml-auto max-w-[85%] font-bold leading-relaxed"
-                : "text-left bg-accent/5 p-3 rounded-2xl rounded-tl-none border border-accent/10 leading-relaxed max-w-[85%]";
+                ? "text-right bg-pinkNeo text-white p-3 rounded-2xl rounded-tr-none ml-auto max-w-[85%] font-black leading-relaxed border-2 border-blackHard shadow-[2px_2px_0px_#1A1A1A]"
+                : "text-left bg-lavender p-3 rounded-2xl rounded-tl-none border-2 border-blackHard leading-relaxed max-w-[85%] text-blackHard font-bold shadow-[2px_2px_0px_#1A1A1A]";
             bubble.innerHTML = text;
             chatHistory.appendChild(bubble);
             chatHistory.scrollTop = chatHistory.scrollHeight;
@@ -532,11 +610,6 @@
             chatInput.value = "";
             handleBot(text);
         });
-
-        function sendReply(text) {
-            addMsg(text, true);
-            handleBot(text);
-        }
 
         // Form feedback
         const form = document.getElementById('brief-form');
