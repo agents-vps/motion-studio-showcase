@@ -13,25 +13,32 @@
                     colors: {
                         dark: '#0B0B0C',
                         titanium: '#E2E2E5',
-                        accent: '#4F46E5', // Deep Indigo
-                        accentLight: '#818CF8',
-                        neon: '#FF5A1F', // Kinetics Orange
+                        accent: 'oklch(60% 0.25 260)', // Perceptual OKLCH Indigo
+                        accentLight: 'oklch(70% 0.2 260)',
+                        neon: 'oklch(65% 0.3 35)', // High-chroma OKLCH Orange
                     }
                 }
             }
         }
     </script>
     <style>
+        /* Modern CSS Nesting and OKLCH properties */
+        :root {
+            --brand-neon: oklch(65% 0.3 35);
+            --brand-accent: oklch(60% 0.25 260);
+        }
+
         /* Parallax image container */
         .parallax-container {
             position: relative;
             overflow: hidden;
-        }
-        .parallax-image {
-            /* Handled via CSS variables linked to scroll */
-            transform: translateY(var(--parallax-y, 0px)) scale(1.1);
-            will-change: transform;
-            transition: transform 0.1s cubic-bezier(0.25, 1, 0.5, 1);
+            
+            & .parallax-image {
+                /* Handled via CSS variables linked to scroll */
+                transform: translateY(var(--parallax-y, 0px)) scale(1.1);
+                will-change: transform;
+                transition: transform 0.1s cubic-bezier(0.25, 1, 0.5, 1);
+            }
         }
 
         /* Drag Slider */
@@ -40,9 +47,10 @@
             user-select: none;
             overflow-x: hidden;
             scrollbar-width: none;
-        }
-        .slider-wrap:active {
-            cursor: grabbing;
+            
+            &:active {
+                cursor: grabbing;
+            }
         }
     </style>
 </head>
@@ -61,9 +69,6 @@
                 <a href="vanilla-observer.html" class="text-white border-b border-neon pb-1 transition-all">03. High Performance</a>
                 <a href="motion-one.html" class="text-gray-400 hover:text-white transition-colors duration-200">04. Interaction Sandbox</a>
             </nav>
-            <div class="md:hidden">
-                <span class="text-xs text-neon font-bold px-2 py-1 border border-neon/30 rounded">SWIPE NAVIGATION</span>
-            </div>
         </div>
     </header>
 

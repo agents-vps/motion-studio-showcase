@@ -14,15 +14,21 @@
                         dark: '#0B0B0C',
                         darker: '#060607',
                         titanium: '#E2E2E5',
-                        accent: '#4F46E5', // Deep Indigo
-                        accentLight: '#818CF8',
-                        neon: '#FF5A1F', // Kinetics Orange
+                        accent: 'oklch(60% 0.25 260)', // Perceptual OKLCH Indigo
+                        accentLight: 'oklch(70% 0.2 260)',
+                        neon: 'oklch(65% 0.3 35)', // High-chroma OKLCH Orange
                     }
                 }
             }
         }
     </script>
     <style>
+        /* Modern CSS Nesting and OKLCH color tokens */
+        :root {
+            --brand-neon: oklch(65% 0.3 35);
+            --brand-accent: oklch(60% 0.25 260);
+        }
+
         /* Modern Scroll Progress Bar with CSS Scroll-driven animations */
         @keyframes page-scroll-bar {
             from { transform: scaleX(0); }
@@ -34,7 +40,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #4F46E5 0%, #FF5A1F 100%);
+            background: linear-gradient(90deg, var(--brand-accent) 0%, var(--brand-neon) 100%);
             transform-origin: 0% 50%;
             z-index: 100;
             animation: page-scroll-bar auto linear;
@@ -66,6 +72,20 @@
         }
         .marquee-container {
             animation: marquee-scroll 25s linear infinite;
+        }
+
+        /* Details Content Transition using CSS details-content (Baseline) */
+        details {
+            &::details-content {
+                transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            
+            &[open]::details-content {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -242,17 +262,16 @@
                 </div>
                 <!-- Interactive Preview -->
                 <div class="bg-black/40 p-4 rounded-xl border border-white/5">
-                    <div class="border border-white/10 rounded-lg overflow-hidden">
-                        <button class="w-full flex justify-between items-center px-4 py-3 bg-white/5 font-medium text-sm text-white" onclick="this.nextElementSibling.classList.toggle('expanded')">
+                    <!-- Standard Details with css transition -->
+                    <details class="border border-white/10 rounded-lg bg-white/5">
+                        <summary class="cursor-pointer font-medium text-sm text-white p-4 select-none focus:outline-none flex justify-between items-center">
                             <span>Qu'est-ce que l'architecture cinétique ?</span>
-                            <svg class="h-4 w-4 text-neon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                        </button>
-                        <div class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out [&.expanded]:grid-template-rows-[1fr]">
-                            <div class="overflow-hidden bg-darker">
-                                <p class="p-4 text-xs text-gray-400 leading-relaxed">Un concept architectural où les structures physiques se déplacent et s'adaptent de manière réactive à l'environnement ou à l'activité des utilisateurs.</p>
-                            </div>
+                            <svg class="h-4 w-4 text-neon transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </summary>
+                        <div class="bg-darker p-4 border-t border-white/5">
+                            <p class="text-xs text-gray-400 leading-relaxed">Un concept architectural où les structures physiques se déplacent et s'adaptent de manière réactive à l'environnement ou à l'activité des utilisateurs.</p>
                         </div>
-                    </div>
+                    </details>
                 </div>
             </div>
 
@@ -293,7 +312,7 @@
                         <span class="text-[10px] bg-indigo-500/10 text-indigo-300 font-bold px-2 py-1 rounded">GSAP INERTIA</span>
                     </div>
                     <p class="text-sm text-gray-400 leading-relaxed mb-6">
-                        <strong>Situation d'usage :</strong> Idéal pour les boutons de navigation, les flèches directionnelles de sliders haut de gamme ou les boutons de lecture média. L'attraction subtile capte l'intérêt de l'utilisateur de façon spectaculaire.
+                        <strong>Situation d'usage :</strong> Idéal pour les boutons de navigation, les flèches directionnelles de sliders haut de gamme ou les boutons de lecture média interactifs. L'attraction subtile capte l'intérêt de l'utilisateur de façon spectaculaire.
                     </p>
                 </div>
                 <!-- Interactive Preview -->
@@ -394,7 +413,7 @@
                 this.vy = (Math.random() - 0.5) * 8 - 2;
                 this.alpha = 1;
                 this.decay = Math.random() * 0.02 + 0.015;
-                this.color = Math.random() > 0.5 ? '#FF5A1F' : '#4F46E5';
+                this.color = Math.random() > 0.5 ? 'oklch(65% 0.3 35)' : 'oklch(60% 0.25 260)';
             }
             update() {
                 this.x += this.vx;

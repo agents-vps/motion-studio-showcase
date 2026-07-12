@@ -13,14 +13,26 @@
                     colors: {
                         dark: '#0B0B0C',
                         titanium: '#E2E2E5',
-                        accent: '#4F46E5', // Deep Indigo
-                        accentLight: '#818CF8',
-                        neon: '#FF5A1F', // Kinetics Orange
+                        accent: 'oklch(60% 0.25 260)', // Perceptual OKLCH Indigo
+                        accentLight: 'oklch(70% 0.2 260)',
+                        neon: 'oklch(65% 0.3 35)', // High-chroma OKLCH Orange
                     }
                 }
             }
         }
     </script>
+    <style>
+        /* Modern CSS Nesting and OKLCH variable orchestration */
+        :root {
+            --brand-neon: oklch(65% 0.3 35);
+            --brand-accent: oklch(60% 0.25 260);
+        }
+
+        #sandbox-box {
+            background: linear-gradient(135deg, var(--brand-accent) 0%, var(--brand-neon) 100%);
+            box-shadow: 0 20px 40px -15px rgb(from var(--brand-accent) r g b / 0.3); /* Relative color syntax */
+        }
+    </style>
 </head>
 <body class="bg-dark text-titanium min-h-screen font-sans antialiased overflow-x-hidden relative">
 
@@ -40,9 +52,6 @@
                 <a href="vanilla-observer.html" class="text-gray-400 hover:text-white transition-colors duration-200">03. High Performance</a>
                 <a href="motion-one.html" class="text-white border-b border-neon pb-1 transition-all">04. Interaction Sandbox</a>
             </nav>
-            <div class="md:hidden">
-                <span class="text-xs text-neon font-bold px-2 py-1 border border-neon/30 rounded">SWIPE NAVIGATION</span>
-            </div>
         </div>
     </header>
 
@@ -114,7 +123,7 @@
 
                 <!-- Target box to animate -->
                 <div class="z-10 flex justify-center items-center h-full">
-                    <div id="sandbox-box" class="w-24 h-24 bg-gradient-to-br from-indigo-500 to-neon rounded-2xl border border-white/10 flex items-center justify-center font-black text-white text-2xl shadow-xl shadow-accent/20">
+                    <div id="sandbox-box" class="w-24 h-24 rounded-2xl border border-white/10 flex items-center justify-center font-black text-white text-2xl shadow-xl">
                         Ω
                     </div>
                 </div>

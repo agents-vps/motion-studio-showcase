@@ -13,20 +13,26 @@
                     colors: {
                         dark: '#0B0B0C',
                         titanium: '#E2E2E5',
-                        accent: '#4F46E5', // Deep Indigo
-                        accentLight: '#818CF8',
-                        neon: '#FF5A1F', // Kinetics Orange
+                        accent: 'oklch(60% 0.25 260)', // Perceptual OKLCH Indigo
+                        accentLight: 'oklch(70% 0.2 260)',
+                        neon: 'oklch(65% 0.3 35)', // High-chroma OKLCH Orange
                     }
                 }
             }
         }
     </script>
     <style>
-        /* Custom Cursor styling */
+        /* Modern CSS Nesting and OKLCH color tokens */
+        :root {
+            --brand-neon: oklch(65% 0.3 35);
+            --brand-accent: oklch(60% 0.25 260);
+        }
+
+        /* Custom Inertial Cursor styling */
         .custom-cursor {
             width: 8px;
             height: 8px;
-            background-color: #FF5A1F;
+            background-color: var(--brand-neon);
             border-radius: 50%;
             position: fixed;
             transform: translate(-50%, -50%);
@@ -34,27 +40,22 @@
             z-index: 9999;
             transition: width 0.2s, height 0.2s, background-color 0.2s;
         }
+
         .custom-cursor-ring {
             width: 40px;
             height: 40px;
-            border: 1px solid rgba(255, 90, 31, 0.4);
+            border: 1px solid rgb(from var(--brand-neon) r g b / 0.4); /* Relative color syntax */
             border-radius: 50%;
             position: fixed;
             transform: translate(-50%, -50%);
             pointer-events: none;
             z-index: 9998;
         }
-        /* Custom scrollbar to match aesthetic */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0B0B0C;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #4F46E5;
-            border-radius: 3px;
+
+        /* Custom Scrollbar design utilizing modern CSS standard scrollbar variables */
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: var(--brand-accent) #0B0B0C;
         }
     </style>
 </head>
@@ -77,9 +78,6 @@
                 <a href="vanilla-observer.html" class="text-gray-400 hover:text-white transition-colors duration-200">03. High Performance</a>
                 <a href="motion-one.html" class="text-gray-400 hover:text-white transition-colors duration-200">04. Interaction Sandbox</a>
             </nav>
-            <div class="md:hidden">
-                <span class="text-xs text-neon font-bold px-2 py-1 border border-neon/30 rounded">SWIPE NAVIGATION</span>
-            </div>
         </div>
     </header>
 
@@ -241,7 +239,7 @@
         // Cursor hovers
         document.querySelectorAll('.cursor-hover-trigger').forEach(el => {
             el.addEventListener('mouseenter', () => {
-                gsap.to(ring, { width: 60, height: 60, duration: 0.3, ease: 'power2.out', borderColor: '#4F46E5' });
+                gsap.to(ring, { width: 60, height: 60, duration: 0.3, ease: 'power2.out', borderColor: 'oklch(60% 0.25 260)' });
             });
             el.addEventListener('mouseleave', () => {
                 gsap.to(ring, { width: 40, height: 40, duration: 0.3, ease: 'power2.out', borderColor: 'rgba(255, 90, 31, 0.4)' });
@@ -250,7 +248,7 @@
 
         document.querySelectorAll('.cursor-hover-trigger-invert').forEach(el => {
             el.addEventListener('mouseenter', () => {
-                gsap.to(ring, { width: 50, height: 50, duration: 0.3, ease: 'power2.out', backgroundColor: '#FF5A1F', borderColor: '#FF5A1F', opacity: 0.2 });
+                gsap.to(ring, { width: 50, height: 50, duration: 0.3, ease: 'power2.out', backgroundColor: 'oklch(65% 0.3 35)', borderColor: 'oklch(65% 0.3 35)', opacity: 0.2 });
             });
             el.addEventListener('mouseleave', () => {
                 gsap.to(ring, { width: 40, height: 40, duration: 0.3, ease: 'power2.out', backgroundColor: 'transparent', borderColor: 'rgba(255, 90, 31, 0.4)', opacity: 1 });
