@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAIROS | Creative Portal (Awwwards Edition)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#050506',
+                        darker: '#010102',
+                        titanium: '#F5F5F7',
+                        accent: 'oklch(60% 0.28 260)', // Highly saturated OKLCH Indigo
+                        neon: 'oklch(65% 0.32 35)', // Deep wide-gamut P3 Neon Orange
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 1. Standard View Transitions API and Portal Circular Mask */
+        @view-transition {
+            navigation: auto;
+        }
+
+        /* Circular reveal from mouse click position */
+        ::view-transition-group(root) {
+            animation-duration: 0.8s;
+        }
+
+        ::view-transition-new(root) {
+            animation-name: portal-circular-reveal;
+            animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+            mix-blend-mode: normal;
+        }
+
+        @keyframes portal-circular-reveal {
+            from {
+                clip-path: circle(0% at var(--click-x, 50%) var(--click-y, 50%));
+            }
+            to {
+                clip-path: circle(150% at var(--click-x, 50%) var(--click-y, 50%));
+            }
+        }
+
+        /* Shared transition targets */
+        .brand-logo-transition {
+            view-transition-name: brand-logo;
+        }
+        .nav-menu-transition {
+            view-transition-name: nav-menu;
+        }
+
+        /* Interactive custom cursor ring */
+        .cursor-ring {
+            width: 44px;
+            height: 44px;
+            border: 1px solid rgb(from oklch(65% 0.32 35) r g b / 0.45);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9998;
+        }
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: oklch(65% 0.32 35);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+
+        /* Continuous Gravity Starfield Canvas */
+        #gravity-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Title text masked entries (split-text reveal simulation) */
+        .text-reveal-mask {
+            display: inline-block;
+            overflow: hidden;
+            vertical-align: bottom;
+            
+            & span {
+                display: inline-block;
+                transform: translateY(100%);
+                will-change: transform;
+            }
+        }
+
+        /* Layout modifications using native CSS nesting */
+        .creative-card {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: border-color 0.4s, background-color 0.4s;
+            
+            &:hover {
+                border-color: oklch(60% 0.28 260);
+                background-color: rgba(255, 255, 255, 0.01);
+                
+                & .arrow-icon {
+                    transform: translate(4px, -4px);
+                    color: oklch(65% 0.32 35);
+                }
+            }
+        }
+    </style>
+</head>
+<body class="bg-dark text-titanium min-h-screen font-sans antialiased overflow-x-hidden relative">
+
+    <!-- Orbital Starfield Canvas Background -->
+    <canvas id="gravity-canvas"></canvas>
+
+    <!-- Interactive Custom Cursor -->
+    <div class="cursor-dot hidden md:block" id="cursor-dot"></div>
+    <div class="cursor-ring hidden md:block" id="cursor-ring"></div>
+
+    <!-- Main Navigation Header -->
+    <header class="fixed top-0 left-0 w-full z-40 bg-dark/80 backdrop-blur-md border-b border-white/5 px-6 lg:px-12 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-xl font-bold tracking-widest text-white flex items-center gap-2 group brand-logo-transition">
+                <span class="w-3 h-3 bg-neon rounded-full group-hover:scale-150 transition-transform duration-300"></span>
+                KAIROS
+            </a>
+            
+            <nav class="hidden md:flex items-center space-x-10 text-xs font-semibold tracking-widest uppercase nav-menu-transition">
+                <a href="index.html" class="text-gray-400 hover:text-white transition-colors duration-200">01. CSS Core</a>
+                <a href="gsap-creative.html" class="text-gray-400 hover:text-white transition-colors duration-200">02. GSAP</a>
+                <a href="vanilla-observer.html" class="text-gray-400 hover:text-white transition-colors duration-200">03. Performance</a>
+                <a href="motion-one.html" class="text-gray-400 hover:text-white transition-colors duration-200">04. Sandbox</a>
+                <a href="encyclopedia.html" class="text-gray-400 hover:text-white transition-colors duration-200">05. Encyclopedia</a>
+            </nav>
+
+            <!-- Soundboard Toggle Switch -->
+            <button id="soundboard-toggle" class="px-5 py-2 border border-neon/30 rounded-full hover:border-neon text-xs font-bold uppercase tracking-wider transition-all bg-neon/5 hover:bg-neon/15 text-neon flex items-center gap-2">
+                <span class="w-2 h-2 bg-neon rounded-full animate-ping" id="sound-ping-dot"></span>
+                <span>Soundboard Off</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Content -->
+    <main class="pt-40 relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
+        <section class="mb-32">
+            <span class="text-xs font-bold tracking-widest text-neon uppercase mb-3 block">THE SUPREME TRIAL PORTAL</span>
+            
+            <!-- Animated masked headers -->
+            <h1 class="text-5xl lg:text-9xl font-black tracking-tighter text-white leading-none mb-8">
+                <span class="text-reveal-mask"><span id="word1">Cinematic</span></span> <br>
+                <span class="text-reveal-mask text-transparent bg-clip-text bg-gradient-to-r from-accent to-neon"><span id="word2">Sensory Studio</span></span>
+            </h1>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+                <p class="lg:col-span-6 text-lg text-gray-400 leading-relaxed font-light">
+                    Observe how the particles swirling in the background are pulled by your cursor. Turn the Soundboard ON above, then sweep your mouse across the grid to synthesize continuous resonant waveforms.
+                </p>
+                <div class="lg:col-span-6 flex gap-6 lg:justify-end">
+                    <button class="magnetic-button px-6 py-4 rounded-xl bg-accent hover:bg-accentLight text-white font-bold text-xs uppercase tracking-widest shadow-xl shadow-accent/25 transition-all duration-300">
+                        Explore Creative Showcase
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Grid Showcasing Continuous Modulation Indicators -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
+            
+            <div class="creative-card p-8 rounded-2xl bg-white/[0.005]">
+                <div class="flex justify-between items-start mb-6">
+                    <span class="text-xs font-bold text-neon uppercase tracking-wider">MODULATION UNIT 1</span>
+                    <span class="arrow-icon text-gray-500 font-bold text-sm transition-transform">&rarr;</span>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Oscillator Pitch Freq</h3>
+                <p class="text-sm text-gray-400 leading-relaxed mb-4">
+                    Moving your cursor horizontally (Mouse X coordinate) sweeps the pitch of our triangle oscillator from a warm 120Hz drone up to a crystal 440Hz tone.
+                </p>
+                <div class="h-1 bg-white/10 rounded-full overflow-hidden">
+                    <div class="h-full bg-accent transition-all duration-100" id="indicator-freq" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="creative-card p-8 rounded-2xl bg-white/[0.005]">
+                <div class="flex justify-between items-start mb-6">
+                    <span class="text-xs font-bold text-neon uppercase tracking-wider">MODULATION UNIT 2</span>
+                    <span class="arrow-icon text-gray-500 font-bold text-sm transition-transform">&rarr;</span>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Biquad Filter Cutoff</h3>
+                <p class="text-sm text-gray-400 leading-relaxed mb-4">
+                    Moving your cursor vertically (Mouse Y coordinate) sweeps the cutoff frequency of our native lowpass filter, revealing rich high-end harmonics.
+                </p>
+                <div class="h-1 bg-white/10 rounded-full overflow-hidden">
+                    <div class="h-full bg-neon transition-all duration-100" id="indicator-filter" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="creative-card p-8 rounded-2xl bg-white/[0.005]">
+                <div class="flex justify-between items-start mb-6">
+                    <span class="text-xs font-bold text-neon uppercase tracking-wider">MODULATION UNIT 3</span>
+                    <span class="arrow-icon text-gray-500 font-bold text-sm transition-transform">&rarr;</span>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">Resonant Gain Volume</h3>
+                <p class="text-sm text-gray-400 leading-relaxed mb-4">
+                    The soundboard breathes with volume only when your mouse is in motion. Moving fast expands the volume; stopping decays it instantly to prevent fatigue.
+                </p>
+                <div class="h-1 bg-white/10 rounded-full overflow-hidden">
+                    <div class="h-full bg-indigo-400 transition-all duration-100" id="indicator-gain" style="width: 0%"></div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-12 bg-darker relative z-10">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-sm text-gray-500">
+                &copy; 2026 KAIROS. Awwwards Creative Sensory Sandbox.
+            </div>
+            <div class="flex gap-6 text-sm text-neon font-bold">
+                <a href="index.html" class="hover:underline">&larr; Return to Hub</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- GSAP via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+    <script>
+        // 1. Capture click coordinates for View Transitions circular portal
+        window.addEventListener('click', (e) => {
+            document.documentElement.style.setProperty('--click-x', `${e.clientX}px`);
+            document.documentElement.style.setProperty('--click-y', `${e.clientY}px`);
+        });
+
+        // 2. Custom ring cursor following with inertia
+        const dot = document.getElementById('cursor-dot');
+        const ring = document.getElementById('cursor-ring');
+
+        let mouse = { x: -100, y: -100 };
+        let dotPos = { x: -100, y: -100 };
+        let ringPos = { x: -100, y: -100 };
+        let lastMouse = { x: -100, y: -100 };
+        let velocity = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        gsap.ticker.add(() => {
+            dotPos.x += (mouse.x - dotPos.x) * 0.35;
+            dotPos.y += (mouse.y - dotPos.y) * 0.35;
+            gsap.set(dot, { x: dotPos.x, y: dotPos.y });
+
+            ringPos.x += (mouse.x - ringPos.x) * 0.15;
+            ringPos.y += (mouse.y - ringPos.y) * 0.15;
+            gsap.set(ring, { x: ringPos.x, y: ringPos.y });
+
+            // Calculate instantaneous cursor velocity
+            const dx = mouse.x - lastMouse.x;
+            const dy = mouse.y - lastMouse.y;
+            const instantSpeed = Math.sqrt(dx * dx + dy * dy);
+            velocity += (instantSpeed - velocity) * 0.15; // Smooth speed tracking
+
+            lastMouse.x = mouse.x;
+            lastMouse.y = mouse.y;
+
+            // Sync visual indicator for gain volume
+            const gainPercent = Math.min(100, (velocity / 40) * 100);
+            document.getElementById('indicator-gain').style.width = `${gainPercent}%`;
+
+            // If soundboard is active, modulate audio nodes dynamically
+            if (audioActive && synth) {
+                synth.update(mouse.x / window.innerWidth, mouse.y / window.innerHeight, velocity / 100);
+            }
+        });
+
+        // 3. Physical Gravity Starfield Simulation
+        const canvas = document.getElementById('gravity-canvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Star {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 1.5;
+                this.vy = (Math.random() - 0.5) * 1.5;
+                this.size = Math.random() * 2 + 0.5;
+                this.alpha = Math.random() * 0.5 + 0.2;
+                this.color = Math.random() > 0.5 ? 'rgba(79, 70, 229, 0.4)' : 'rgba(255, 90, 31, 0.4)';
+            }
+
+            update() {
+                // Newton orbital gravity calculation pull toward cursor
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < 400 && dist > 10) {
+                    const force = (400 - dist) / 4000; // Gravity factor
+                    this.vx += (dx / dist) * force;
+                    this.vy += (dy / dist) * force;
+                }
+
+                // Damping friction to keep speed finite
+                this.vx *= 0.95;
+                this.vy *= 0.95;
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Infinite wrap bounds
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // Generate 250 orbital stars
+        for (let i = 0; i < 250; i++) {
+            stars.push(new Star());
+        }
+
+        function animateStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+            requestAnimationFrame(animateStars);
+        }
+        animateStars();
+
+        // 4. Staggered character entrance masks on page load
+        gsap.to('#word1', { translateY: '0%', duration: 1.2, ease: 'power4.out', delay: 0.1 });
+        gsap.to('#word2', { translateY: '0%', duration: 1.2, ease: 'power4.out', delay: 0.25 });
+
+        // 5. Continuous Web Audio Synthesizer Class
+        class ContinuousSynth {
+            constructor() {
+                this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                this.osc = this.audioCtx.createOscillator();
+                this.filter = this.audioCtx.createBiquadFilter();
+                this.gainNode = this.audioCtx.createGain();
+
+                // Setup parameters
+                this.osc.type = 'triangle'; // Smooth base drone
+                this.filter.type = 'lowpass';
+                this.filter.Q.value = 8; // Boost resonance slightly for cinematic sweeps
+
+                // Connect pipeline
+                this.osc.connect(this.filter);
+                this.filter.connect(this.gainNode);
+                this.gainNode.connect(this.audioCtx.destination);
+
+                // Start silently
+                this.gainNode.gain.setValueAtTime(0, this.audioCtx.currentTime);
+                this.osc.start();
+            }
+
+            update(xNormalized, yNormalized, velocityNormalized) {
+                // Map horizontal coordinate X to pitch (120Hz to 440Hz)
+                const pitch = 120 + xNormalized * 320;
+                this.osc.frequency.setTargetAtTime(pitch, this.audioCtx.currentTime, 0.12);
+                document.getElementById('indicator-freq').style.width = `${xNormalized * 100}%`;
+
+                // Map vertical coordinate Y to lowpass filter cutoff (150Hz to 2200Hz)
+                const cutoff = 150 + (1 - yNormalized) * 2050;
+                this.filter.frequency.setTargetAtTime(cutoff, this.audioCtx.currentTime, 0.12);
+                document.getElementById('indicator-filter').style.width = `${(1 - yNormalized) * 100}%`;
+
+                // Map velocity directly to volume gain
+                const volume = Math.min(0.18, velocityNormalized * 0.15);
+                this.gainNode.gain.setTargetAtTime(volume, this.audioCtx.currentTime, 0.18);
+            }
+
+            suspend() {
+                this.gainNode.gain.setTargetAtTime(0, this.audioCtx.currentTime, 0.2);
+            }
+        }
+
+        // Toggle Soundboard interaction
+        let audioActive = false;
+        let synth = null;
+        const soundBtn = document.getElementById('soundboard-toggle');
+        const pingDot = document.getElementById('sound-ping-dot');
+
+        soundBtn.addEventListener('click', () => {
+            audioActive = !audioActive;
+            if (audioActive) {
+                if (!synth) {
+                    synth = new ContinuousSynth();
+                } else {
+                    if (synth.audioCtx.state === 'suspended') {
+                        synth.audioCtx.resume();
+                    }
+                }
+                soundBtn.classList.add('bg-neon/20', 'border-neon');
+                soundBtn.querySelector('span:last-child').innerText = "Soundboard On";
+                pingDot.classList.remove('bg-neon');
+                pingDot.classList.add('bg-emerald-400');
+            } else {
+                if (synth) {
+                    synth.suspend();
+                }
+                soundBtn.classList.remove('bg-neon/20', 'border-neon');
+                soundBtn.querySelector('span:last-child').innerText = "Soundboard Off";
+                pingDot.classList.remove('bg-emerald-400');
+                pingDot.classList.add('bg-neon');
+            }
+        });
+
+        // 6. Magnetic buttons attraction
+        document.querySelectorAll('.magnetic-button').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - (rect.left + rect.width / 2);
+                const y = e.clientY - (rect.top + rect.height / 2);
+                gsap.to(btn, { x: x * 0.35, y: y * 0.35, duration: 0.3 });
+                gsap.to(ring, { width: 70, height: 70, duration: 0.3 });
+            });
+            btn.addEventListener('mouseleave', () => {
+                gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.3)' });
+                gsap.to(ring, { width: 44, height: 44, duration: 0.5 });
+            });
+        });
+    </script>
+</body>
+</html>
