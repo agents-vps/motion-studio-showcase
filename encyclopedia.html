@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Encyclopédie du Mouvement Web | KAIROS</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0B0B0C',
+                        darker: '#060607',
+                        titanium: '#E2E2E5',
+                        accent: '#4F46E5', // Deep Indigo
+                        accentLight: '#818CF8',
+                        neon: '#FF5A1F', // Kinetics Orange
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Modern Scroll Progress Bar with CSS Scroll-driven animations */
+        @keyframes page-scroll-bar {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+        .page-scroll-tracker {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4F46E5 0%, #FF5A1F 100%);
+            transform-origin: 0% 50%;
+            z-index: 100;
+            animation: page-scroll-bar auto linear;
+            animation-timeline: scroll(root);
+        }
+
+        /* Error Shake Animation */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+        .animate-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        /* Interactive Particle Canvas overlay */
+        #sparkle-canvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Seamless Marquee */
+        @keyframes marquee-scroll {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee-container {
+            animation: marquee-scroll 25s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-dark text-titanium min-h-screen font-sans antialiased overflow-x-hidden relative">
+
+    <!-- Global Sparkle Canvas -->
+    <canvas id="sparkle-canvas"></canvas>
+
+    <!-- Scroll Tracker -->
+    <div class="page-scroll-tracker"></div>
+
+    <!-- Main Header -->
+    <header class="fixed top-0 left-0 w-full z-40 bg-dark/80 backdrop-blur-md border-b border-white/5 px-6 lg:px-12 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-xl font-bold tracking-widest text-white flex items-center gap-2 group">
+                <span class="w-2.5 h-2.5 bg-neon rounded-full group-hover:scale-150 transition-transform duration-300"></span>
+                KAIROS <span class="text-xs text-gray-500 tracking-normal font-normal">KINETICS</span>
+            </a>
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium tracking-wider">
+                <a href="index.html" class="text-gray-400 hover:text-white transition-colors">01. CSS Core</a>
+                <a href="gsap-creative.html" class="text-gray-400 hover:text-white transition-colors">02. GSAP Storytelling</a>
+                <a href="vanilla-observer.html" class="text-gray-400 hover:text-white transition-colors">03. High Performance</a>
+                <a href="motion-one.html" class="text-gray-400 hover:text-white transition-colors">04. Interaction Sandbox</a>
+            </nav>
+            <div class="text-xs text-neon font-bold px-3 py-1 border border-neon/30 rounded bg-neon/5">
+                ENCYCLOPÉDIE DE L'ANIMATION
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-20 max-w-7xl mx-auto px-6 lg:px-12">
+        
+        <!-- Hero Introduction -->
+        <section class="mb-16">
+            <span class="text-xs font-bold tracking-widest text-neon uppercase mb-2 block">The Ultimate Web Motion Compendium</span>
+            <h1 class="text-4xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 leading-none">
+                L'Encyclopédie <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-neon">Du Mouvement Web</span>
+            </h1>
+            <p class="text-lg text-gray-400 leading-relaxed max-w-3xl">
+                Explorez toutes les typologies d'animations, de transitions et de micro-interactions modernes. Chaque composant est interactif, optimisé pour les performances, et accompagné de sa situation d'usage recommandée.
+            </p>
+        </section>
+
+        <!-- Dynamic Category Navigation Tab -->
+        <div class="flex gap-4 mb-12 border-b border-white/5 pb-4 overflow-x-auto scrollbar-none">
+            <button class="tab-btn active px-5 py-2.5 bg-neon text-white rounded-lg text-xs font-bold uppercase tracking-wider" onclick="switchCategory('all')">Tout</button>
+            <button class="tab-btn px-5 py-2.5 bg-white/5 hover:bg-white/10 rounded-lg text-xs font-bold text-gray-400 hover:text-white uppercase tracking-wider" onclick="switchCategory('feedback')">01. Feedback & Actions</button>
+            <button class="tab-btn px-5 py-2.5 bg-white/5 hover:bg-white/10 rounded-lg text-xs font-bold text-gray-400 hover:text-white uppercase tracking-wider" onclick="switchCategory('status')">02. États & Boucles</button>
+            <button class="tab-btn px-5 py-2.5 bg-white/5 hover:bg-white/10 rounded-lg text-xs font-bold text-gray-400 hover:text-white uppercase tracking-wider" onclick="switchCategory('disclosure')">03. Révélations & Menus</button>
+            <button class="tab-btn px-5 py-2.5 bg-white/5 hover:bg-white/10 rounded-lg text-xs font-bold text-gray-400 hover:text-white uppercase tracking-wider" onclick="switchCategory('wayfinding')">04. Guidage & Scroll</button>
+        </div>
+
+        <!-- Master Animation Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12" id="encyclopedia-grid">
+            
+            <!-- INTERACTION 1: 3D Press Button -->
+            <div class="motion-card p-8 border border-white/5 bg-white/[0.01] rounded-2xl flex flex-col justify-between h-[380px]" data-category="feedback">
+                <div>
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <span class="text-xs text-neon font-bold uppercase tracking-widest">Micro-interaction &bull; Tactile</span>
+                            <h3 class="text-2xl font-bold text-white mt-1">1. Clic Physique Tactile 3D</h3>
+                        </div>
+                        <span class="text-[10px] bg-indigo-500/10 text-indigo-300 font-bold px-2 py-1 rounded">CSS / GPU</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed mb-6">
+                        <strong>Situation d'usage :</strong> Idéal pour les boutons d'appel à l'action principaux (validation de panier, soumission de formulaires critiques). L'effet de sillage 3D offre une confirmation physique instantanée en mimant l'élasticité d'un bouton mécanique réel.
+                    </p>
+                </div>
+                <!-- Interactive Preview -->
+                <div class="flex items-center justify-between bg-black/40 p-4 rounded-xl border border-white/5">
+                    <button class="group relative inline-block text-sm focus:outline-none rounded-lg">
+                        <span class="absolute inset-0 w-full h-full transition-all duration-200 ease-out transform translate-y-1 translate-x-1 bg-accent/80 rounded-lg group-hover:translate-y-1.5 group-hover:translate-x-1.5 group-active:translate-y-0 group-active:translate-x-0"></span>
+                        <span class="relative inline-block px-5 py-2.5 font-semibold text-white bg-accent rounded-lg transform transition-transform duration-100 ease-out group-active:translate-y-1 group-active:translate-x-1 border border-white/10">
+                            Confirmer la commande
+                        </span>
+                    </button>
+                    <span class="text-xs text-gray-500 italic">Cliquez pour tester</span>
+                </div>
+            </div>
+
+            <!-- INTERACTION 2: Floating Label Input -->
+            <div class="motion-card p-8 border border-white/5 bg-white/[0.01] rounded-2xl flex flex-col justify-between h-[380px]" data-category="feedback">
+                <div>
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <span class="text-xs text-neon font-bold uppercase tracking-widest">Transition &bull; Formulaires</span>
+                            <h3 class="text-2xl font-bold text-white mt-1">2. Label Flottant Contextuel</h3>
+                        </div>
+                        <span class="text-[10px] bg-indigo-500/10 text-indigo-300 font-bold px-2 py-1 rounded">CSS ONLY</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed mb-6">
+                        <strong>Situation d'usage :</strong> Indispensable pour les formulaires d'inscription ou de connexion denses. Garder le label visible même lorsque le champ est rempli évite la surcharge cognitive et les erreurs de saisie de l'utilisateur.
+                    </p>
+                </div>
+                <!-- Interactive Preview -->
+                <div class="bg-black/40 p-4 rounded-xl border border-white/5">
+                    <div class="relative mt-2">
+                        <input type="text" id="input-demo" placeholder=" " required
+                            class="peer w-full border-b-2 border-gray-600 py-1.5 placeholder-transparent focus:border-neon focus:outline-none transition-colors duration-200 bg-transparent text-white text-sm" />
+                        <label for="input-demo"
+                            class="absolute left-0 -top-3.5 text-gray-500 text-xs transition-all duration-200 pointer-events-none
+                                   peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-1.5 
+                                   peer-focus:-top-3.5 peer-focus:text-neon peer-focus:text-xs">
+                            Adresse Email de Facturation
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INTERACTION 3: Success Checkmark Morph -->
+            <div class="motion-card p-8 border border-white/5 bg-white/[0.01] rounded-2xl flex flex-col justify-between h-[380px]" data-category="status">
+                <div>
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <span class="text-xs text-neon font-bold uppercase tracking-widest">Boucles &bull; Succès</span>
+                            <h3 class="text-2xl font-bold text-white mt-1">3. Morphing SVG de Validation</h3>
+                        </div>
+                        <span class="text-[10px] bg-indigo-500/10 text-indigo-300 font-bold px-2 py-1 rounded">JS / SVG</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed mb-6">
+                        <strong>Situation d'usage :</strong> À intégrer juste après la réussite d'un paiement ou le traitement complet d'une requête. Le tracé dynamique de l'icône de succès apporte une gratification instantanée qui rassure l'utilisateur sur la fin du tunnel.
+                    </p>
+                </div>
+                <!-- Interactive Preview -->
+                <div class="flex items-center justify-between bg-black/40 p-4 rounded-xl border border-white/5">
+                    <button onclick="triggerSuccessAnimation(this)" class="px-5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs uppercase tracking-wider flex items-center gap-3">
+                        <span>Payer 25.00€</span>
+                        <svg class="h-4 w-4 text-white opacity-0 transition-opacity duration-300" id="success-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </button>
+                    <span class="text-xs text-gray-500 italic" id="payment-status">Cliquez pour valider</span>
+                </div>
+            </div>
+
+            <!-- INTERACTION 4: Validation Error Shake -->
+            <div class="motion-card p-8 border border-white/5 bg-white/[0.01] rounded-2xl flex flex-col justify-between h-[380px]" data-category="status">
+                <div>
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <span class="text-xs text-neon font-bold uppercase tracking-widest">Micro-interaction &bull; Erreurs</span>
+                            <h3 class="text-2xl font-bold text-white mt-1">4. Secousse d'Échec Physique</h3>
+                        </div>
+                        <span class="text-[10px] bg-indigo-500/10 text-indigo-300 font-bold px-2 py-1 rounded">CSS TRIGGER</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed mb-6">
+                        <strong>Situation d'usage :</strong> Indispensable pour signaler les mots de passe erronés ou les entrées incorrectes. Ce mouvement mimant le "non" humain attire instantanément le regard sur le champ bloquant sans nécessiter de long texte d'erreur agressif.
+                    </p>
+                </div>
+                <!-- Interactive Preview -->
+                <div class="flex items-center gap-4 bg-black/40 p-4 rounded-xl border border-white/5">
+                    <input type="password" id="shake-input" placeholder="Code d'accès" value="1234" class="px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-red-500">
+                    <button onclick="triggerShake()" class="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg text-xs font-bold uppercase tracking-widest">
+                        Soumettre
+                    </button>
+                </div>
+            </div>
+
+            <!-- INTERACTION 5: CSS Height Auto Accordion -->
+            <div class="motion-card p-8 border border-white/5 bg-white/[0.01] rounded-2xl flex flex-col justify-between h-[380px]" data-category="disclosure">
+                <div>
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <span class="text-xs text-neon font-bold uppercase tracking-widest">Révélations &bull; Layouts</span>
+                            <h3 class="text-2xl font-bold text-white mt-1">5. Accordéon CSS à Hauteur Variable</h3>
+                        </div>
+                        <span class="text-[10px] bg-indigo-500/10 text-indigo-300 font-bold px-2 py-1 rounded">GRID LAYOUT</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed mb-6">
+                        <strong>Situation d'usage :</strong> Idéal pour les sections FAQ denses ou les filtres de recherche complexes. La transition de hauteur s'adapte dynamiquement au volume de texte contenu sans nécessiter de calcul de hauteur en pixels via JS.
+                    </p>
+                </div>
+                <!-- Interactive Preview -->
+                <div class="bg-black/40 p-4 rounded-xl border border-white/5">
+                    <div class="border border-white/10 rounded-lg overflow-hidden">
+                        <button class="w-full flex justify-between items-center px-4 py-3 bg-white/5 font-medium text-sm text-white" onclick="this.nextElementSibling.classList.toggle('expanded')">
+                            <span>Qu'est-ce que l'architecture cinétique ?</span>
+                            <svg class="h-4 w-4 text-neon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </button>
+                        <div class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out [&.expanded]:grid-template-rows-[1fr]">
+                            <div class="overflow-hidden bg-darker">
+                                <p class="p-4 text-xs text-gray-400 leading-relaxed">Un concept architectural où les structures physiques se déplacent et s'adaptent de manière réactive à l'environnement ou à l'activité des utilisateurs.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INTERACTION 6: Shimmer Skeleton Card -->
+            <div class="motion-card p-8 border border-white/5 bg-white/[0.01] rounded-2xl flex flex-col justify-between h-[380px]" data-category="status">
+                <div>
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <span class="text-xs text-neon font-bold uppercase tracking-widest">États &bull; Perceived Latency</span>
+                            <h3 class="text-2xl font-bold text-white mt-1">6. Shimmer Skeleton Loader</h3>
+                        </div>
+                        <span class="text-[10px] bg-indigo-500/10 text-indigo-300 font-bold px-2 py-1 rounded">GPU PULSE</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed mb-6">
+                        <strong>Situation d'usage :</strong> Utilisé lors du chargement initial de données asynchrones (cartes de produits, articles). Cela réduit la sensation d'attente de l'utilisateur par rapport à un indicateur de chargement rotatif classique.
+                    </p>
+                </div>
+                <!-- Interactive Preview -->
+                <div class="bg-black/40 p-4 rounded-xl border border-white/5">
+                    <div class="animate-pulse flex space-x-4">
+                        <div class="rounded-lg bg-white/10 h-12 w-12"></div>
+                        <div class="flex-1 space-y-3 py-1">
+                            <div class="h-2 bg-white/10 rounded w-3/4"></div>
+                            <div class="h-2 bg-white/10 rounded w-1/2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INTERACTION 7: Magnetic Alignment Alignment -->
+            <div class="motion-card p-8 border border-white/5 bg-white/[0.01] rounded-2xl flex flex-col justify-between h-[380px]" data-category="wayfinding">
+                <div>
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <span class="text-xs text-neon font-bold uppercase tracking-widest">Guidage &bull; Attractivité</span>
+                            <h3 class="text-2xl font-bold text-white mt-1">7. Attracteur Magnétique Spatial</h3>
+                        </div>
+                        <span class="text-[10px] bg-indigo-500/10 text-indigo-300 font-bold px-2 py-1 rounded">GSAP INERTIA</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed mb-6">
+                        <strong>Situation d'usage :</strong> Idéal pour les boutons de navigation, les flèches directionnelles de sliders haut de gamme ou les boutons de lecture média. L'attraction subtile capte l'intérêt de l'utilisateur de façon spectaculaire.
+                    </p>
+                </div>
+                <!-- Interactive Preview -->
+                <div class="flex items-center justify-between bg-black/40 p-4 rounded-xl border border-white/5">
+                    <div class="magnetic-box relative w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center cursor-pointer">
+                        <span class="magnetic-thumb w-6 h-6 bg-neon rounded-full transition-colors"></span>
+                    </div>
+                    <span class="text-xs text-gray-500 italic">Approchez la souris du cercle</span>
+                </div>
+            </div>
+
+            <!-- INTERACTION 8: Spring Sandbox Module -->
+            <div class="motion-card p-8 border border-white/5 bg-white/[0.01] rounded-2xl flex flex-col justify-between h-[380px]" data-category="wayfinding">
+                <div>
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <span class="text-xs text-neon font-bold uppercase tracking-widest">Kinetics &bull; Bac à Sable</span>
+                            <h3 class="text-2xl font-bold text-white mt-1">8. Moteur de Ressort Physique (Spring)</h3>
+                        </div>
+                        <span class="text-[10px] bg-indigo-500/10 text-indigo-300 font-bold px-2 py-1 rounded">SPRING PHYSICS</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed mb-6">
+                        <strong>Situation d'usage :</strong> Idéal pour configurer les interactions "bouncy" (comme l'ouverture de menus glissants ou le drag-and-drop). Gérer la raideur et l'amortissement donne un aspect organique et authentique.
+                    </p>
+                </div>
+                <!-- Interactive Preview -->
+                <div class="flex items-center justify-between bg-black/40 p-4 rounded-xl border border-white/5">
+                    <button onclick="triggerElasticBox(this)" class="px-5 py-2.5 bg-accent hover:bg-accentLight text-white rounded-lg text-xs font-bold uppercase tracking-widest">
+                        Déclencher le Ressort
+                    </button>
+                    <div class="w-12 h-12 bg-gradient-to-tr from-accent to-neon rounded-lg shadow-lg" id="elastic-target"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Section infinite marquee -->
+        <section class="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden py-12 bg-white/5 border-y border-white/5 mt-20">
+            <div class="flex overflow-hidden select-none whitespace-nowrap">
+                <div class="marquee-container flex gap-12 text-3xl lg:text-5xl font-black text-white/10 uppercase">
+                    <span>Micro-interactions tactiles</span>
+                    <span>&middot;</span>
+                    <span>Optimisation GPU</span>
+                    <span>&middot;</span>
+                    <span>Transitions Top-Layer</span>
+                    <span>&middot;</span>
+                    <span>Expériences Immersives</span>
+                    <span>&middot;</span>
+                    <!-- Duplicate -->
+                    <span>Micro-interactions tactiles</span>
+                    <span>&middot;</span>
+                    <span>Optimisation GPU</span>
+                    <span>&middot;</span>
+                    <span>Transitions Top-Layer</span>
+                    <span>&middot;</span>
+                    <span>Expériences Immersives</span>
+                    <span>&middot;</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-12 bg-darker">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-sm text-gray-500">
+                &copy; 2026 KAIROS. L'art de l'interaction web.
+            </div>
+            <div class="flex gap-6 text-sm text-neon font-bold">
+                <a href="index.html" class="hover:underline">&larr; Retour au hub</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- GSAP via CDN (for custom cursor and magnetic attraction) -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+    <script>
+        // 1. Interactive Sparkle canvas particle generation
+        const canvas = document.getElementById('sparkle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 3 + 2;
+                this.vx = (Math.random() - 0.5) * 8;
+                this.vy = (Math.random() - 0.5) * 8 - 2;
+                this.alpha = 1;
+                this.decay = Math.random() * 0.02 + 0.015;
+                this.color = Math.random() > 0.5 ? '#FF5A1F' : '#4F46E5';
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += 0.1; // gravity
+                this.alpha -= this.decay;
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                p.update();
+                p.draw();
+                if (p.alpha <= 0) particles.splice(index, 1);
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        window.addEventListener('mousedown', (e) => {
+            for (let i = 0; i < 12; i++) {
+                particles.push(new Particle(e.clientX, e.clientY));
+            }
+        });
+
+        // 2. Switch Category
+        function switchCategory(category) {
+            // Update active btn
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach(btn => btn.className = "tab-btn px-5 py-2.5 bg-white/5 hover:bg-white/10 rounded-lg text-xs font-bold text-gray-400 hover:text-white uppercase tracking-wider");
+            
+            // Set active class
+            event.target.className = "tab-btn active px-5 py-2.5 bg-neon text-white rounded-lg text-xs font-bold uppercase tracking-wider";
+
+            const cards = document.querySelectorAll('.motion-card');
+            cards.forEach(card => {
+                const cardCategory = card.getAttribute('data-category');
+                if (category === 'all' || cardCategory === category) {
+                    card.style.display = 'flex';
+                    gsap.fromTo(card, { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.4 });
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // 3. Success Checkmark morph triggers
+        function triggerSuccessAnimation(btn) {
+            const svg = document.getElementById('success-svg');
+            const status = document.getElementById('payment-status');
+            
+            btn.classList.add('bg-emerald-700');
+            svg.classList.remove('opacity-0');
+            svg.classList.add('opacity-100');
+            status.innerText = "Traitement en cours...";
+            status.classList.add('text-emerald-400');
+
+            setTimeout(() => {
+                status.innerText = "Paiement Réussi ! ✓";
+                // Bounce checkmark
+                gsap.fromTo(svg, { scale: 0.5 }, { scale: 1.2, duration: 0.4, ease: 'back.out(1.7)' });
+            }, 1000);
+
+            // Reset after 3 seconds
+            setTimeout(() => {
+                btn.classList.remove('bg-emerald-700');
+                svg.classList.add('opacity-0');
+                svg.classList.remove('opacity-100');
+                status.innerText = "Cliquez pour valider";
+                status.classList.remove('text-emerald-400');
+            }, 4000);
+        }
+
+        // 4. Trigger Input Shake (Validation error simulation)
+        function triggerShake() {
+            const container = document.getElementById('shake-input');
+            container.classList.add('border-red-500', 'bg-red-500/10', 'animate-shake');
+            
+            setTimeout(() => {
+                container.classList.remove('animate-shake');
+            }, 4000);
+
+            setTimeout(() => {
+                container.classList.remove('border-red-500', 'bg-red-500/10');
+            }, 3000);
+        }
+
+        // 5. Magnetic element hover alignment
+        const magBox = document.querySelector('.magnetic-box');
+        const magThumb = document.querySelector('.magnetic-thumb');
+
+        magBox.addEventListener('mousemove', (e) => {
+            const rect = magBox.getBoundingClientRect();
+            const x = e.clientX - (rect.left + rect.width / 2);
+            const y = e.clientY - (rect.top + rect.height / 2);
+
+            gsap.to(magThumb, { x: x * 0.6, y: y * 0.6, scale: 1.2, duration: 0.3 });
+            magThumb.classList.add('bg-indigo-400');
+        });
+
+        magBox.addEventListener('mouseleave', () => {
+            gsap.to(magThumb, { x: 0, y: 0, scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.3)' });
+            magThumb.classList.remove('bg-indigo-400');
+        });
+
+        // 6. Spring elastic bounce target
+        function triggerElasticBox(btn) {
+            const target = document.getElementById('elastic-target');
+            gsap.fromTo(target, 
+                { scale: 1, y: 0 }, 
+                { scale: 1.3, y: -20, duration: 0.8, ease: 'elastic.out(1.2, 0.4)' }
+            );
+        }
+    </script>
+</body>
+</html>
